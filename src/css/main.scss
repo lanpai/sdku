@@ -1,0 +1,18 @@
+* {
+    scroll-behavior: smooth;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+body {
+    margin: 0;
+}
+
+:focus {
+    outline: none;
+}
