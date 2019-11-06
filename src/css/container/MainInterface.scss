@@ -1,7 +1,9 @@
-#main-interface, #main-interface>div {
+#main-interface {
+    display: flex;
+    margin: auto;
     height: 100%;
-    width: 100%;
+    width: 35%;
 
-    margin: 0;
-    padding: 0;
+    flex-direction: column;
+    justify-content: space-evenly;
 }

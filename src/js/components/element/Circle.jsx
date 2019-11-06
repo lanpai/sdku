@@ -10,7 +10,7 @@ class Circle extends Component {
     }
 
     onClick() {
-        this.props.onClick(this.props.col, this.props.row);
+        this.props.onClick(this.props.col, this.props.row, this.props.children);
     }
 
     render() {

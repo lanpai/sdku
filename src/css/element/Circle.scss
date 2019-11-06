@@ -16,11 +16,11 @@
     height: calc(100% - 16px);
     width: calc(100% - 16px);
 
-    font-size: 4vw;
+    font-size: 2em;
     text-align: center;
 
     border-style: solid;
-    border-width: 3px;
+    border-width: 2px;
     border-color: transparent;
     border-radius: 100%;
 
@@ -28,6 +28,7 @@
 
     opacity: 0.6;
     transition-duration: 0.5s;
+    transition-property: opacity, background-color;
 }
 .circle>div:hover {
     opacity: 1;

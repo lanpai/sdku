@@ -18,9 +18,7 @@ class MainInterface extends Component {
     }
 
     render() {
-        let stylesheet = {
-            backgroundColor: this.props.theme.background
-        };
+        document.body.style.backgroundColor = this.props.theme.background;
 
         let values = [];
         for (let row = 0; row < 9; row++) {
@@ -34,7 +32,6 @@ class MainInterface extends Component {
         }
 
         let puzzle = sudoku.makepuzzle();
-        console.log(puzzle);
         for (let i = 0; i < puzzle.length; i++) {
             if (puzzle[i]) {
                 values[Math.floor(i / 9)][i % 9].isSolid = true;
@@ -43,9 +40,7 @@ class MainInterface extends Component {
         }
 
         return (
-            <div style={ stylesheet }>
-                <Board rows={ 9 } cols={ 9 } initValues={ values } theme={ this.props.theme } active={ 5 } />
-            </div>
+            <Board rows={ 9 } cols={ 9 } initValues={ values } theme={ this.props.theme } />
         );
     }
 }
