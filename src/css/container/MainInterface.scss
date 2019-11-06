@@ -1,9 +1,14 @@
 #main-interface {
     display: flex;
-    margin: auto;
+    margin: 0 auto;
+    padding: 0 2vh;
     height: 100%;
-    width: 35%;
+    width: 70vh;
 
     flex-direction: column;
     justify-content: space-evenly;
+}
+
+#main-interface>*:first-child, #main-interface>*:last-child {
+    margin: 2vh 0;
 }

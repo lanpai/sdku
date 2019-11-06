@@ -11,14 +11,53 @@ class Board extends Component {
         super();
 
         this.checkCompletion = this.checkCompletion.bind(this);
+        this.checkCount = this.checkCount.bind(this);
         this.handleGridClick = this.handleGridClick.bind(this);
         this.switchControl = this.switchControl.bind(this);
         this.createTable = this.createTable.bind(this);
 
         this.state = {
             values: null,
-            active: 1
+            active: 1,
+            count: []
         };
+    }
+
+    componentDidMount() {
+        document.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    this.switchControl(0, 0, parseInt(e.key));
+                    break;
+            }
+        });
+
+        this.checkCount();
+    }
+
+    checkCount() {
+        let newCount = [];
+        for (let i = 0; i < 9; i++)
+            newCount.push(0);
+
+        for (let y = 0; y < this.props.rows; y++)
+            for (let x = 0; x < this.props.cols; x++)
+                if (this.state.values[y][x] !== null)
+                    newCount[this.state.values[y][x].value - 1]++;
+
+        console.log(newCount);
+
+        this.setState({
+            count: newCount
+        });
     }
 
     checkCompletion() {
@@ -26,14 +65,12 @@ class Board extends Component {
             let sum = 0;
             for (let x = 0; x < this.props.cols; x++)
                 sum += this.state.values[y][x].value;
-            console.log(`row ${y + 1}: ${sum}`);
             if (sum !== 45) return false;
         }
         for (let x = 0; x < this.props.cols; x++) {
             let sum = 0;
             for (let y = 0; y < this.props.rows; y++)
                 sum += this.state.values[y][x].value;
-            console.log(`col ${x + 1}: ${sum}`);
             if (sum !== 45) return false;
         }
         for (let x = 0; x < 3; x++) {
@@ -43,7 +80,6 @@ class Board extends Component {
                     for (let ysub = 0; ysub < 3; ysub++)
                         sum += this.state.values[y * 3 + ysub][x * 3 + xsub].value;
                 }
-                console.log(`box ${x + 1}, ${y + 1}: ${sum}`);
                 if (sum !== 45) return false;
             }
         }
@@ -68,7 +104,7 @@ class Board extends Component {
                 values: newValues
             });
 
-            console.log(this.checkCompletion());
+            this.checkCount();
         }
     }
 
@@ -135,7 +171,8 @@ class Board extends Component {
                         theme={ this.props.theme }
                         solid
                         active={ i === this.state.active }
-                        onClick={ this.switchControl }>
+                        onClick={ this.switchControl }
+                        sub={ this.state.count[i - 1] }>
                         { i }
                     </Circle>
                 </div>
