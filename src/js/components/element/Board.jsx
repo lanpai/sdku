@@ -19,7 +19,7 @@ class Board extends Component {
         this.state = {
             values: null,
             meta: null,
-            active: 1,
+            active: null,
             count: [],
             complete: false
         };
@@ -99,6 +99,7 @@ class Board extends Component {
     }
 
     switchControl(x, y, currValue) {
+        this.state.active === currValue && (currValue = null);
         this.setState({
             active: currValue
         });
@@ -127,7 +128,7 @@ class Board extends Component {
                             className={ this.state.complete ? 'complete' : '' }
                             theme={ this.props.theme }
                             solid={ meta.isSolid }
-                            active={ value === this.state.active }
+                            active={ value === this.state.active && this.state.active !== null }
                             row={ row }
                             col={ col }
                             onClick={ this.handleGridClick }>
