@@ -20,7 +20,8 @@ class Board extends Component {
             values: null,
             meta: null,
             active: 1,
-            count: []
+            count: [],
+            complete: false
         };
     }
 
@@ -79,7 +80,19 @@ class Board extends Component {
                 meta: newMeta
             });
 
-            console.log(Sudoku.CheckComplete(this.state.values));
+            if (Sudoku.CheckComplete(this.state.values)) {
+                let newMeta = this.state.meta.slice();
+                for (let ysub = 0; ysub < newMeta.length; ysub++) {
+                    for (let xsub = 0; xsub < newMeta[y].length; xsub++)
+                        newMeta[ysub][xsub].isSolid = true;
+                }
+
+                this.setState({
+                    meta: newMeta,
+                    active: null,
+                    complete: true
+                });
+            }
 
             this.checkCount();
         }
@@ -110,7 +123,8 @@ class Board extends Component {
                         className='flex-item'
                         key={ col }
                         style={ (col % 3 === 2 ? { borderRightColor: this.props.theme.primary } : {}) }>
-                        <Circle 
+                        <Circle
+                            className={ this.state.complete ? 'complete' : '' }
                             theme={ this.props.theme }
                             solid={ meta.isSolid }
                             active={ value === this.state.active }
@@ -164,12 +178,12 @@ class Board extends Component {
                 <div
                     style={{ color: this.props.theme.secondary }}>
                     <span className='title'>sdku</span><br />
-                    <Timer />
+                    <Timer stop={ this.state.complete } />
                 </div>
                 <div>
                     { this.createTable(this.props.rows, this.props.cols) }
                 </div>
-                <div className='flex-row control'>
+                <div style={{ display: (this.state.complete) ? 'none' : 'flex' }} className='flex-row control'>
                     { controlRow }
                 </div>
             </>

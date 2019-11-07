@@ -44,3 +44,22 @@
     font-size: 2vh;
     line-height: 2vh;
 }
+
+.complete {
+    animation-name: complete-anim;
+    animation-duration: 3s;
+}
+
+@for $i from 1 through 9 {
+    .flex-item:nth-child(#{$i})>div>.complete {
+        animation-delay: #{0.3 * ($i - 1)}s;
+    }
+}
+
+@keyframes complete-anim {
+    0% { opacity: 0.6; }
+    10% { opacity: 0.7; }
+    50% { opacity: 0.3; }
+    90% { opacity: 0.7; }
+    100% { opacity: 0.6; }
+}

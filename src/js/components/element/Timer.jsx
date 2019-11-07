@@ -11,7 +11,6 @@ class Board extends Component {
         this.state = {
             currTime: 0,
             startTime: 0,
-            enabled: false
         };
     }
 
@@ -23,7 +22,6 @@ class Board extends Component {
         this.setState({
             currTime: Date.now(),
             startTime: Date.now(),
-            enabled: true,
         });
 
         this.timer = setInterval(() => {
@@ -34,10 +32,6 @@ class Board extends Component {
     }
 
     stop() {
-        this.setState({
-            enabled: false
-        });
-
         clearInterval(this.timer);
     }
 
@@ -45,11 +39,13 @@ class Board extends Component {
         this.setState({
             currTime: 0,
             startTime: 0,
-            enabled: false
         });
     }
 
     render() {
+        this.props.stop && this.stop();
+        this.props.reset && this.reset();
+
         let diff = this.state.currTime - this.state.startTime;
         let ms = (diff % 1000).toString().padStart(3, '0');
         let seconds = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');

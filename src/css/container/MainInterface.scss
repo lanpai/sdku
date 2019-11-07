@@ -9,6 +9,12 @@
     justify-content: space-evenly;
 }
 
-#main-interface>*:first-child, #main-interface>*:last-child {
+#main-interface>* {
     margin: 2vh 0;
+}
+#main-interface>*:first-child {
+    margin: 2vh 0 0 0;
+}
+#main-interface>*:last-child {
+    margin: 0 0 2vh 0;
 }
