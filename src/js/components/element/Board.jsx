@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import sudoku from 'sudoku';
+import Sudoku from '../../../Sudoku';
 
 import css from '../../../css/element/Board.scss';
 
@@ -10,7 +11,6 @@ class Board extends Component {
     constructor() {
         super();
 
-        this.checkCompletion = this.checkCompletion.bind(this);
         this.checkCount = this.checkCount.bind(this);
         this.handleGridClick = this.handleGridClick.bind(this);
         this.switchControl = this.switchControl.bind(this);
@@ -18,6 +18,7 @@ class Board extends Component {
 
         this.state = {
             values: null,
+            meta: null,
             active: 1,
             count: []
         };
@@ -51,58 +52,34 @@ class Board extends Component {
         for (let y = 0; y < this.props.rows; y++)
             for (let x = 0; x < this.props.cols; x++)
                 if (this.state.values[y][x] !== null)
-                    newCount[this.state.values[y][x].value - 1]++;
-
-        console.log(newCount);
+                    newCount[this.state.values[y][x] - 1]++;
 
         this.setState({
             count: newCount
         });
     }
 
-    checkCompletion() {
-        for (let y = 0; y < this.props.rows; y++) {
-            let sum = 0;
-            for (let x = 0; x < this.props.cols; x++)
-                sum += this.state.values[y][x].value;
-            if (sum !== 45) return false;
-        }
-        for (let x = 0; x < this.props.cols; x++) {
-            let sum = 0;
-            for (let y = 0; y < this.props.rows; y++)
-                sum += this.state.values[y][x].value;
-            if (sum !== 45) return false;
-        }
-        for (let x = 0; x < 3; x++) {
-            for (let y = 0; y < 3; y++) {
-                let sum = 0;
-                for (let xsub = 0; xsub < 3; xsub++) {
-                    for (let ysub = 0; ysub < 3; ysub++)
-                        sum += this.state.values[y * 3 + ysub][x * 3 + xsub].value;
-                }
-                if (sum !== 45) return false;
-            }
-        }
-
-        return true;
-    }
-
     handleGridClick(x, y, currValue) {
-        if (!this.state.values[y][x].isSolid) {
+        if (!this.state.meta[y][x].isSolid) {
             let newValue = this.state.active;
 
             if (currValue === this.state.active)
                 newValue = null;
 
             let newValues = this.state.values.slice();
-            newValues[y][x] = {
+            newValues[y][x] = newValue;
+
+            let newMeta = this.state.meta.slice();
+            newMeta[y][x] = {
                 isSolid: false,
-                value: newValue
             };
 
             this.setState({
-                values: newValues
+                values: newValues,
+                meta: newMeta
             });
+
+            console.log(Sudoku.CheckComplete(this.state.values));
 
             this.checkCount();
         }
@@ -116,7 +93,9 @@ class Board extends Component {
 
     createTable(rows, cols) {
         if (!this.state.values)
-            this.state.values = this.props.initValues;
+            this.state.values = this.props.initValues[0];
+        if (!this.state.meta)
+            this.state.meta = this.props.initValues[1];
 
         let table = [];
 
@@ -124,6 +103,7 @@ class Board extends Component {
             let children = [];
             for (let col = 0; col < cols; col++) {
                 let value = this.state.values[row][col];
+                let meta = this.state.meta[row][col];
 
                 children.push(
                     <div
@@ -132,12 +112,12 @@ class Board extends Component {
                         style={ (col % 3 === 2 ? { borderRightColor: this.props.theme.primary } : {}) }>
                         <Circle 
                             theme={ this.props.theme }
-                            solid={ value.isSolid }
-                            active={ value.value === this.state.active }
+                            solid={ meta.isSolid }
+                            active={ value === this.state.active }
                             row={ row }
                             col={ col }
                             onClick={ this.handleGridClick }>
-                            { value.value }
+                            { value }
                         </Circle>
                     </div>
                 );
