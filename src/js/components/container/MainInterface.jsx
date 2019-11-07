@@ -34,6 +34,11 @@ class MainInterface extends Component {
 
         values = Sudoku.Generate();
 
+        for (let y = 0; y < values.length; y++) {
+            for (let x = 0; x < values[y].length; x++)
+                if (values[y][x] !== null) meta[y][x].isSolid = true;
+        }
+
         return (
             <Board rows={ 9 } cols={ 9 } initValues={[ values, meta ]} theme={ this.props.theme } />
         );
