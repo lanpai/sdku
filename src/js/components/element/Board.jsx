@@ -55,7 +55,6 @@ class Board extends Component {
                 if (this.state.values[y][x] !== null)
                     newCount[this.state.values[y][x] - 1]++;
 
-        console.log('checking:');
         console.log(Sudoku.Solve(this.state.values, true));
         let string = '';
         for (let row of this.state.values)

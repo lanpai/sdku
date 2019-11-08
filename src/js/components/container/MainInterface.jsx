@@ -15,10 +15,6 @@ const mapStateToProps = state => {
 class MainInterface extends Component {
     constructor() {
         super();
-    }
-
-    render() {
-        document.body.style.backgroundColor = this.props.theme.background;
 
         let values = [];
         let meta = [];
@@ -34,13 +30,25 @@ class MainInterface extends Component {
 
         values = Sudoku.Generate();
 
-        /*for (let y = 0; y < values.length; y++) {
+        for (let y = 0; y < values.length; y++) {
             for (let x = 0; x < values[y].length; x++)
                 if (values[y][x] !== null) meta[y][x].isSolid = true;
-        }*/
+        }
+
+        this.state = {
+            values: values,
+            meta: meta
+        };
+    }
+
+    render() {
+        document.body.style.backgroundColor = this.props.theme.background;
 
         return (
-            <Board rows={ 9 } cols={ 9 } initValues={[ values, meta ]} theme={ this.props.theme } />
+            <Board
+                rows={ 9 } cols={ 9 }
+                initValues={[ this.state.values, this.state.meta ]}
+                theme={ this.props.theme } />
         );
     }
 }

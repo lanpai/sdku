@@ -129,55 +129,61 @@ function Solve(grid, count = false, y = 0, x = 0) {
     return newGrid;
 }
 
+function CheckNumSolutions(grid, y, x) {
+    let newGrid = [];
+    for (let y = 0; y < grid.length; y++)
+        newGrid.push(grid[y].slice());
+
+    if (y !== null && x !== null)
+        newGrid[y][x] = null;
+
+    return Solve(grid, true).count;
+}
+
 function RemoveTiles(grid, difficulty, i = 0) {
-    if (difficulty !== i) {
-        let newGrid = [];
-        for (let y = 0; y < grid.length; y++)
-            newGrid.push(grid[y].slice());
+    let newGrid = [];
+    for (let y = 0; y < grid.length; y++)
+        newGrid.push(grid[y].slice());
 
-        let removable = [];
+    if (i !== difficulty) {
+        let possible = [];
 
-        for (let y = 0; y < grid.length; y++) {
-            for (let x = 0; x < grid[y].length; x++) {
-                if (grid[y][x] !== null) {
-                    let possible = GetPossibleValues(grid, y, x);
-                    if (GetPossibleValues(grid, y, x).length === 1 ||
-                        CheckIndirectRemovable(grid, y, x))
-                        removable.push([ y, x ]);
-                    //else if (CheckPossiblePerValue(grid, y, x))
-                    //    removable.push([ y, x ]);
-                }
-            }
+        for (let i = 0; i < 81; i++) {
+            let y = Math.floor(i / 9);
+            let x = i % 9;
+
+            if (newGrid[y][x] === null)
+                continue;
+
+            if (CheckNumSolutions(newGrid, y, x) === 1)
+                possible.push([ y, x ]);
         }
 
-        if (removable.length === 0)
+        if (possible.length === 0)
             return null;
 
-        removable.sort(() => Math.random() - 0.5);
+        possible.sort(() => Math.random() - 0.5);
 
-        i++;
+        for (let loc of possible) {
+            let prevVal = newGrid[loc[0]][loc[1]];
+            newGrid[loc[0]][loc[1]] = null;
 
-        for (let j = 0; j < removable.length; j++) {
-            let prevValue = newGrid[removable[j][0]][removable[j][1]];
-            newGrid[removable[j][0]][removable[j][1]] = null;
-
-            let childGrid = RemoveTiles(newGrid, difficulty, i);
-            if (childGrid === null) {
-                newGrid[removable[j][0]][removable[j][1]] = prevValue;
+            let childValue = RemoveTiles(newGrid, difficulty, i + 1);
+            if (childValue === null) {
+                newGrid[loc[0]][loc[1]] = prevVal;
                 continue;
             }
             else {
-                return childGrid;
+                return childValue;
             }
         }
         return null;
     }
-    else {
-        return grid;
-    }
+
+    return newGrid;
 }
 
-function Generate(difficulty = 0) {
+function Generate(difficulty = 50) {
     let grid = [];
     for (let y = 0; y < 9; y++) {
         grid.push([]);
