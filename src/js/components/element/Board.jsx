@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import sudoku from 'sudoku';
 import Sudoku from '../../../Sudoku';
 
 import css from '../../../css/element/Board.scss';
