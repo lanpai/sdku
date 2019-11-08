@@ -140,7 +140,7 @@ function RemoveTiles(grid, difficulty, i = 0) {
     return newGrid;
 }
 
-function Generate(difficulty = 45) {
+function Generate(difficulty = 46) {
     let grid = [];
     for (let y = 0; y < 9; y++) {
         grid.push([]);

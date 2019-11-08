@@ -174,7 +174,7 @@ class Board extends Component {
                         solid
                         active={ i === this.state.active }
                         onClick={ this.switchControl }
-                        sub={ this.state.count[i - 1] }>
+                        sub={ 9 - this.state.count[i - 1] }>
                         { i }
                     </Circle>
                 </div>
