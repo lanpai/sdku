@@ -1,2 +1,2 @@
 # sdku
-web-based sudoku application
+simple sudoku application in react.js
