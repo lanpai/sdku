@@ -28,49 +28,6 @@ function GetPossibleValues(grid, y, x) {
     return possible;
 }
 
-function CheckPossiblePerValue(grid, y, x) {
-    let possible = [];
-    for (let ysub = 0; ysub < 9; ysub++) {
-        for (let xsub = 0; xsub < 9; xsub++) {
-            if (GetPossibleValues(grid, ysub, xsub).indexOf(grid[y][x])) {
-                possible.push([ ysub, xsub ]);
-            }
-        }
-    }
-
-    if (possible.length === 1 && y === possible[0][0] && x === possible[0][1])
-        return true;
-    else
-        return false;
-}
-
-function CheckIndirectRemovable(grid, y, x) {
-    return false;
-
-    let gridY = Math.floor(y / 3) * 3;
-    let gridX = Math.floor(x / 3) * 3;
-    for (let i = 0; i < 9; i++) {
-        if (i !== y && grid[i][x] === null) {
-            if (GetPossibleValues(grid, i, x).indexOf(grid[y][x] !== -1))
-                return false;
-        }
-
-        if (i !== x && grid[y][i] === null) {
-            if (GetPossibleValues(grid, y, i).indexOf(grid[y][x] !== -1))
-                return false;
-        }
-
-        let ysub = gridY + Math.floor(i / 3)
-        let xsub = gridX + (i % 3);
-        if (ysub !== y && xsub !== x && grid[ysub][xsub] === null) {
-            if (GetPossibleValues(grid, ysub, xsub))
-                return false;
-        }
-    }
-
-    return true;
-}
-
 function CheckComplete(grid) {
     for (let y = 0; y < grid.length; y++) {
         for (let x = 0; x < grid[y].length; x++) {
@@ -183,7 +140,7 @@ function RemoveTiles(grid, difficulty, i = 0) {
     return newGrid;
 }
 
-function Generate(difficulty = 50) {
+function Generate(difficulty = 45) {
     let grid = [];
     for (let y = 0; y < 9; y++) {
         grid.push([]);
