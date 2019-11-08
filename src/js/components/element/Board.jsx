@@ -55,6 +55,11 @@ class Board extends Component {
                 if (this.state.values[y][x] !== null)
                     newCount[this.state.values[y][x] - 1]++;
 
+        let sum = 0;
+        for (let count of newCount)
+            sum += count;
+        console.log(parseInt(sum));
+
         this.setState({
             count: newCount
         });

@@ -1,4 +1,4 @@
-function GetPossibleValues(grid, y, x) {
+function GetPossibleValues(grid, y, x, includeSelf) {
     let possible = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
 
     for (let i = 0; i < 9; i++) {
@@ -30,6 +30,22 @@ function GetPossibleValues(grid, y, x) {
     return possible;
 }
 
+function CheckIndirectRemovable(grid, y, x) {
+    let possible = [];
+    for (let ysub = 0; ysub < 9; ysub++) {
+        for (let xsub = 0; xsub < 9; xsub++) {
+            if (GetPossibleValues(grid, ysub, xsub).indexOf(grid[y][x])) {
+                possible.push([ ysub, xsub ]);
+            }
+        }
+    }
+
+    if (possible.length === 1 && y === possible[0][0] && x === possible[0][1])
+        return true;
+    else
+        return false;
+}
+
 function CheckComplete(grid) {
     for (let y = 0; y < grid.length; y++) {
         for (let x = 0; x < grid[y].length; x++) {
@@ -48,6 +64,7 @@ function CheckComplete(grid) {
     return true;
 }
 
+
 function Solve(grid, y = 0, x = 0) {
     let newGrid = [];
     for (let y = 0; y < grid.length; y++)
@@ -58,10 +75,7 @@ function Solve(grid, y = 0, x = 0) {
             if (newGrid[y][x] === null) {
                 let possible = GetPossibleValues(newGrid, y, x);
 
-                if (possible.length === 1) {
-                    newGrid[y][x] = possible[0];
-                }
-                else if (possible.length === 0) {
+                if (possible.length === 0) {
                     return null;
                 }
                 else {
@@ -70,10 +84,7 @@ function Solve(grid, y = 0, x = 0) {
                         newGrid[y][x] = possibility;
 
                         let childValue = Solve(newGrid, y, x);
-                        if (childValue === null) {
-                            continue;
-                        }
-                        else {
+                        if (childValue !== null) {
                             newGrid = childValue;
                             break;
                         }
@@ -88,18 +99,22 @@ function Solve(grid, y = 0, x = 0) {
 }
 
 function RemoveTiles(grid, difficulty, i = 0) {
-    difficulty > 64 && (difficulty = 64);
     if (difficulty !== i) {
         let newGrid = [];
         for (let y = 0; y < grid.length; y++)
             newGrid.push(grid[y].slice());
 
         let removable = [];
+
         for (let y = 0; y < grid.length; y++) {
             for (let x = 0; x < grid[y].length; x++) {
-                let possible = GetPossibleValues(grid, y, x);
-                if (possible.length === 1)
-                    removable.push([ y, x ]);
+                if (grid[y][x] !== null) {
+                    let possible = GetPossibleValues(grid, y, x);
+                    if (possible.length === 1)
+                        removable.push([ y, x ]);
+                    //else if (CheckIndirectRemovable(grid, y, x))
+                    //    removable.push([ y, x ]);
+                }
             }
         }
 
@@ -130,7 +145,7 @@ function RemoveTiles(grid, difficulty, i = 0) {
     }
 }
 
-function Generate(difficulty = 100) {
+function Generate(difficulty = 40) {
     let grid = [];
     for (let y = 0; y < 9; y++) {
         grid.push([]);

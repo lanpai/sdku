@@ -34,6 +34,12 @@ class MainInterface extends Component {
 
         values = Sudoku.Generate();
 
+        let string = '';
+        for (let row of values)
+            for (let value of row)
+                string += value ? value : '.';
+        console.log(string);
+
         for (let y = 0; y < values.length; y++) {
             for (let x = 0; x < values[y].length; x++)
                 if (values[y][x] !== null) meta[y][x].isSolid = true;
