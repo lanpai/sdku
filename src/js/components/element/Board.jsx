@@ -55,10 +55,13 @@ class Board extends Component {
                 if (this.state.values[y][x] !== null)
                     newCount[this.state.values[y][x] - 1]++;
 
-        let sum = 0;
-        for (let count of newCount)
-            sum += count;
-        console.log(parseInt(sum));
+        console.log('checking:');
+        console.log(Sudoku.Solve(this.state.values, true));
+        let string = '';
+        for (let row of this.state.values)
+            for (let value of row)
+                string += value ? value : '.';
+        console.log(string);
 
         this.setState({
             count: newCount
