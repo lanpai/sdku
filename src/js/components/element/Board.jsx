@@ -61,24 +61,24 @@ class Board extends Component {
                 if (values[y][x] !== null) meta[y][x].isSolid = true;
         }
 
+        this.state.values = values;
+        this.state.meta = meta;
         this.setState({
             values: values,
             meta: meta
         });
-
-        this.checkCount();
     }
 
     checkCount() {
-        let newCount = [];
+        let count = [];
         for (let i = 0; i < 9; i++)
-            newCount.push(0);
+            count.push(0);
 
         if (this.state.values !== null) {
             for (let y = 0; y < this.state.values.length; y++)
                 for (let x = 0; x < this.state.values[y].length; x++)
                     if (this.state.values[y][x] !== null)
-                        newCount[this.state.values[y][x] - 1]++;
+                        count[this.state.values[y][x] - 1]++;
 
             let string = '';
             for (let row of this.state.values)
@@ -86,9 +86,7 @@ class Board extends Component {
                     string += value ? value : '.';
         }
 
-        this.setState({
-            count: newCount
-        });
+        return count;
     }
 
     handleGridClick(x, y, currValue) {
@@ -124,8 +122,6 @@ class Board extends Component {
                     complete: true
                 });
             }
-
-            this.checkCount();
         }
     }
 
@@ -180,6 +176,8 @@ class Board extends Component {
     }
 
     render() {
+        let count = this.checkCount();
+
         let tableStyle = {
             borderColor: this.props.theme.secondary
         };
@@ -195,7 +193,7 @@ class Board extends Component {
                         solid
                         active={ i === this.state.active }
                         onClick={ this.switchControl }
-                        sub={ 9 - this.state.count[i - 1] }>
+                        sub={ 9 - count[i - 1] }>
                         { i }
                     </Circle>
                 </div>
