@@ -41,6 +41,31 @@ class Board extends Component {
             }
         });
 
+        let values = [];
+        let meta = [];
+        for (let row = 0; row < 9; row++) {
+            let children = [];
+            for (let col = 0; col < 9; col++)
+                children.push({
+                    isSolid: false,
+                });
+            values.push([]);
+            meta.push(children);
+        }
+
+        console.log(this.props.difficulty);
+        values = Sudoku.Generate(this.props.difficulty);
+
+        for (let y = 0; y < values.length; y++) {
+            for (let x = 0; x < values[y].length; x++)
+                if (values[y][x] !== null) meta[y][x].isSolid = true;
+        }
+
+        this.setState({
+            values: values,
+            meta: meta
+        });
+
         this.checkCount();
     }
 
@@ -49,17 +74,17 @@ class Board extends Component {
         for (let i = 0; i < 9; i++)
             newCount.push(0);
 
-        for (let y = 0; y < this.props.rows; y++)
-            for (let x = 0; x < this.props.cols; x++)
-                if (this.state.values[y][x] !== null)
-                    newCount[this.state.values[y][x] - 1]++;
+        if (this.state.values !== null) {
+            for (let y = 0; y < this.state.values.length; y++)
+                for (let x = 0; x < this.state.values[y].length; x++)
+                    if (this.state.values[y][x] !== null)
+                        newCount[this.state.values[y][x] - 1]++;
 
-        console.log(Sudoku.Solve(this.state.values, true));
-        let string = '';
-        for (let row of this.state.values)
-            for (let value of row)
-                string += value ? value : '.';
-        console.log(string);
+            let string = '';
+            for (let row of this.state.values)
+                for (let value of row)
+                    string += value ? value : '.';
+        }
 
         this.setState({
             count: newCount
@@ -111,47 +136,44 @@ class Board extends Component {
         });
     }
 
-    createTable(rows, cols) {
-        if (!this.state.values)
-            this.state.values = this.props.initValues[0];
-        if (!this.state.meta)
-            this.state.meta = this.props.initValues[1];
-
+    createTable() {
         let table = [];
 
-        for (let row = 0; row < rows; row++) {
-            let children = [];
-            for (let col = 0; col < cols; col++) {
-                let value = this.state.values[row][col];
-                let meta = this.state.meta[row][col];
+        if (this.state.values !== null) {
+            for (let row = 0; row < this.state.values.length; row++) {
+                let children = [];
+                for (let col = 0; col < this.state.values[row].length; col++) {
+                    let value = this.state.values[row][col];
+                    let meta = this.state.meta[row][col];
 
-                children.push(
-                    <div
-                        className='flex-item'
-                        key={ col }
-                        style={ (col % 3 === 2 ? { borderRightColor: this.props.theme.primary } : {}) }>
-                        <Circle
-                            className={ this.state.complete ? 'complete' : '' }
-                            theme={ this.props.theme }
-                            solid={ meta.isSolid }
-                            active={ value === this.state.active && this.state.active !== null }
-                            row={ row }
-                            col={ col }
-                            onClick={ this.handleGridClick }>
-                            { value }
-                        </Circle>
+                    children.push(
+                        <div
+                            className='flex-item'
+                            key={ col }
+                            style={ (col % 3 === 2 ? { borderRightColor: this.props.theme.primary } : {}) }>
+                            <Circle
+                                className={ this.state.complete ? 'complete' : '' }
+                                theme={ this.props.theme }
+                                solid={ meta.isSolid }
+                                active={ value === this.state.active && this.state.active !== null }
+                                row={ row }
+                                col={ col }
+                                onClick={ this.handleGridClick }>
+                                { value }
+                            </Circle>
+                        </div>
+                    );
+                }
+
+                table.push(
+                    <div 
+                        className='flex-row'
+                        key={ row }
+                        style={ (row % 3 === 2 ? { borderBottomColor: this.props.theme.primary } : {}) }>
+                        { children }
                     </div>
                 );
             }
-
-            table.push(
-                <div 
-                    className='flex-row'
-                    key={ row }
-                    style={ (row % 3 === 2 ? { borderBottomColor: this.props.theme.primary } : {}) }>
-                    { children }
-                </div>
-            );
         }
 
         return table;
@@ -188,7 +210,7 @@ class Board extends Component {
                     <Timer stop={ this.state.complete } />
                 </div>
                 <div>
-                    { this.createTable(this.props.rows, this.props.cols) }
+                    { this.createTable() }
                 </div>
                 <div style={{ display: (this.state.complete) ? 'none' : 'flex' }} className='flex-row control'>
                     { controlRow }

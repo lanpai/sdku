@@ -3,52 +3,61 @@ import { connect } from 'react-redux';
 
 import css from '../../../css/container/MainInterface.scss';
 
+import Menu from './Menu.jsx';
 import Board from '../element/Board.jsx';
 import Sudoku from '../../../Sudoku';
 
 const mapStateToProps = state => {
     return {
-        theme: state.theme
+        theme: state.theme,
+        active: state.active,
+        difficulty: state.settings.difficulty
     }
 };
 
 class MainInterface extends Component {
     constructor() {
         super();
-
-        let values = [];
-        let meta = [];
-        for (let row = 0; row < 9; row++) {
-            let children = [];
-            for (let col = 0; col < 9; col++)
-                children.push({
-                    isSolid: false,
-                });
-            values.push([]);
-            meta.push(children);
-        }
-
-        values = Sudoku.Generate();
-
-        for (let y = 0; y < values.length; y++) {
-            for (let x = 0; x < values[y].length; x++)
-                if (values[y][x] !== null) meta[y][x].isSolid = true;
-        }
-
-        this.state = {
-            values: values,
-            meta: meta
-        };
     }
 
     render() {
         document.body.style.backgroundColor = this.props.theme.background;
 
+        let current = null;
+
+        let difficulty = 0;
+        switch (this.props.difficulty) {
+            case 'easy':
+                difficulty = 25;
+                break;
+            case 'normal':
+                difficulty = 35;
+                break;
+            case 'hard':
+                difficulty = 45;
+                break;
+        }
+
+        switch (this.props.active) {
+            case 'menu':
+                current = (
+                    <Menu theme={ this.props.theme } />
+                );
+                break;
+            case 'board':
+                current = (
+                    <Board
+                        rows={ 9 } cols={ 9 }
+                        difficulty={ difficulty }
+                        theme={ this.props.theme } />
+                );
+                break;
+        }
+
         return (
-            <Board
-                rows={ 9 } cols={ 9 }
-                initValues={[ this.state.values, this.state.meta ]}
-                theme={ this.props.theme } />
+            <>
+                { current }
+            </>
         );
     }
 }
