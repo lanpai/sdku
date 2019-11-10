@@ -19,16 +19,18 @@ class Board extends Component {
     }
 
     start() {
+        let now = Date.now();
+
         this.setState({
-            currTime: Date.now(),
-            startTime: Date.now(),
+            currTime: now,
+            startTime: now,
         });
 
         this.timer = setInterval(() => {
             this.setState({
                 currTime: Date.now()
             });
-        });
+        }, 1);
     }
 
     stop() {
