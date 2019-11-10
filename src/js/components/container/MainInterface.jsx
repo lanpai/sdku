@@ -28,13 +28,13 @@ class MainInterface extends Component {
         let difficulty = 0;
         switch (this.props.difficulty) {
             case 'easy':
-                difficulty = 25;
+                difficulty = 30;
                 break;
             case 'normal':
-                difficulty = 35;
+                difficulty = 45;
                 break;
             case 'hard':
-                difficulty = 45;
+                difficulty = 55;
                 break;
         }
 

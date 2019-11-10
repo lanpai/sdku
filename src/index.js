@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Sudoku from './Sudoku';
+
 import MainInterface from './js/components/container/MainInterface.jsx';
 import css from './css/main.scss';
 

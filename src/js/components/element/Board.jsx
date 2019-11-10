@@ -41,6 +41,8 @@ class Board extends Component {
             }
         });
 
+        let timeStart = Date.now();
+
         let values = [];
         let meta = [];
         for (let row = 0; row < 9; row++) {
@@ -60,6 +62,16 @@ class Board extends Component {
             for (let x = 0; x < values[y].length; x++)
                 if (values[y][x] !== null) meta[y][x].isSolid = true;
         }
+
+        let string = '';
+        for (let y = 0; y < values.length; y++) {
+            let row = '';
+            for (let x = 0; x < values[y].length; x++)
+                row += values[y][x] ? values[y][x] : '.';
+            string += row;
+        }
+        console.log(string);
+        console.log('timing: ', Date.now() - timeStart);
 
         this.state.values = values;
         this.state.meta = meta;
