@@ -58,7 +58,7 @@ class Menu extends Component {
                                 active={ this.props.stopWatch }
                                 onClick={ () => ToggleMode('stopWatch') }
                                 sub='mode'>
-                                time trial
+                                stopwatch
                             </Circle>
                         </div>
                     </div>
