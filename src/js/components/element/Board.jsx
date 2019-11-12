@@ -214,7 +214,6 @@ class Board extends Component {
             let newHistory = cloneDeep(this.state.moveHistory);
             newHistory.push([ y, x, currValue, newValue ]);
 
-            console.log(newHistory);
             this.setState({
                 values: newValues,
                 moveHistory: newHistory
