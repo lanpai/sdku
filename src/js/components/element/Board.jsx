@@ -45,12 +45,16 @@ class Board extends Component {
             moveHistory: [],
             timer: null,
             currTime: 0,
-            startTime: 0
+            startTime: 0,
+            initTime: 0
         };
     }
 
     resetWatch() {
         let now = Date.now();
+
+        if (this.state.initTime === 0)
+            this.state.initTime = now;
 
         this.setState({
             currTime: now,
@@ -191,6 +195,7 @@ class Board extends Component {
             active: null,
             playing: false,
             className: className,
+            currTime: this.state.initTime
         });
     }
 
@@ -201,12 +206,10 @@ class Board extends Component {
 
             newValues[latest[0]][latest[1]] = latest[2];
 
-            let newHistory = cloneDeep(this.state.moveHistory);
-            newHistory.pop();
+            this.state.moveHistory.pop();
 
             this.setState({
-                values: newValues,
-                moveHistory: newHistory
+                values: newValues
             });
         }
     }
@@ -221,12 +224,10 @@ class Board extends Component {
             let newValues = cloneDeep(this.state.values);
             newValues[y][x] = newValue;
 
-            let newHistory = cloneDeep(this.state.moveHistory);
-            newHistory.push([ y, x, currValue, newValue ]);
+            this.state.moveHistory.push([ y, x, currValue, newValue ]);
 
             this.setState({
-                values: newValues,
-                moveHistory: newHistory
+                values: newValues
             });
 
             if (Sudoku.CheckComplete(newValues)) {
@@ -329,6 +330,8 @@ class Board extends Component {
         }
 
         let watchDiff = this.state.currTime - this.state.startTime;
+        if (this.props.stopwatch || !this.state.playing)
+            watchDiff = (this.props.stopwatchSetting * 1000) - watchDiff;
 
         let controlClass = 'control';
         if (!this.state.playing)
