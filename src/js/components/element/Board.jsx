@@ -251,6 +251,10 @@ class Board extends Component {
             );
         }
 
+        let controlClass = 'control';
+        if (!this.state.playing)
+            controlClass += ' complete';
+
         return (
             <>
                 <div
@@ -262,8 +266,10 @@ class Board extends Component {
                 <div>
                     { this.createTable() }
                 </div>
-                <div style={{ display: (this.state.playing) ? 'flex' : 'none' }} className='flex-row control'>
-                    { controlRow }
+                <div className={ controlClass }>
+                    <div className='flex-row'>
+                        { controlRow }
+                    </div>
                 </div>
             </>
         );

@@ -1,5 +1,6 @@
 .flex-row {
     display: flex;
+    flex: 1;
     justify-content: space-around;
 
     border-bottom-style: dotted;
@@ -35,11 +36,19 @@
     border-right-style: none;
 }
 
-.control {
-    margin-top: 20vh;
-}
 .control>* {
     border-color: transparent;
+}
+
+.complete {
+    flex: 0;
+    animation-name: complete-anim;
+    animation-duration: 3s;
+}
+
+@keyframes complete-anim {
+    0% { flex: 0.33 }
+    100% { flex: 0 }
 }
 
 .description {
