@@ -43,7 +43,8 @@
 .complete {
     flex: 0;
     animation-name: complete-anim;
-    animation-duration: 3s;
+    animation-duration: 750ms;
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
 @keyframes complete-anim {
