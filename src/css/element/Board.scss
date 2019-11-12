@@ -55,3 +55,19 @@
 .description {
     clip: rect(0, 0, 0, 0);
 }
+
+.button-menu {
+    float: right;
+}
+
+.button-menu>* {
+    cursor: pointer;
+    opacity: 0.6;
+    transition-duration: 0.3s;
+    transition-property: opacity;
+
+}
+
+.button-menu>*:hover {
+    opacity: 1;
+}

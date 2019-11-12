@@ -23,6 +23,7 @@ class Board extends Component {
 
         this.checkCount = this.checkCount.bind(this);
         this.disableGrid = this.disableGrid.bind(this);
+        this.undo = this.undo.bind(this);
         this.handleGridClick = this.handleGridClick.bind(this);
         this.switchControl = this.switchControl.bind(this);
         this.createTable = this.createTable.bind(this);
@@ -35,7 +36,8 @@ class Board extends Component {
             active: null,
             count: [],
             className: '',
-            description: ''
+            description: '',
+            moveHistory: []
         };
     }
 
@@ -144,6 +146,23 @@ class Board extends Component {
         });
     }
 
+    undo() {
+        if (this.state.moveHistory.length > 0) {
+            let newValues = cloneDeep(this.state.values);
+            let latest = this.state.moveHistory[this.state.moveHistory.length - 1];
+
+            newValues[latest[0]][latest[1]] = latest[2];
+
+            let newHistory = cloneDeep(this.state.moveHistory);
+            newHistory.pop();
+
+            this.setState({
+                values: newValues,
+                moveHistory: newHistory
+            });
+        }
+    }
+
     handleGridClick(x, y, currValue) {
         if (this.state.playing) {
             let newValue = this.state.active;
@@ -154,8 +173,13 @@ class Board extends Component {
             let newValues = cloneDeep(this.state.values);
             newValues[y][x] = newValue;
 
+            let newHistory = cloneDeep(this.state.moveHistory);
+            newHistory.push([ y, x, currValue, newValue ]);
+
+            console.log(newHistory);
             this.setState({
-                values: newValues
+                values: newValues,
+                moveHistory: newHistory
             });
 
             if (this.props.perfect && this.state.active !== this.state.answer[y][x]) {
@@ -260,8 +284,8 @@ class Board extends Component {
                 <div
                     style={{ color: this.props.theme.secondary }}>
                     <span className='title'>sdku</span><br />
-                    <Timer stop={ !this.state.playing } /><br />
-                    <span className={ this.state.description ? 'description' : '' }>{ this.state.description }</span>
+                    <Timer stop={ !this.state.playing } />
+                    <div className='button-menu'><span onClick={ this.undo }>undo</span></div>
                 </div>
                 <div>
                     { this.createTable() }
