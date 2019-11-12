@@ -4,6 +4,7 @@
     padding: 0 2vh;
     height: 100%;
     width: 70vh;
+    max-width: calc(100vw - 4vh);
 
     flex-direction: column;
     justify-content: space-evenly;
