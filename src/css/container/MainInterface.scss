@@ -12,4 +12,13 @@
 
 #main-interface>* {
     overflow: hidden;
+    animation-name: transition-anim;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 }
+
+@keyframes transition-anim {
+    0% { opacity: 0 }
+    100% { opacity: 1 }
+}
+
