@@ -35,14 +35,13 @@
     border-right-style: none;
 }
 
-.timer {
-    font-size: 3vh;
-    line-height: 3vh;
-}
-
 .control {
     margin-top: 20vh;
 }
 .control>* {
     border-color: transparent;
+}
+
+.description {
+    clip: rect(0, 0, 0, 0);
 }

@@ -10,8 +10,7 @@ import Sudoku from '../../../Sudoku';
 const mapStateToProps = state => {
     return {
         theme: state.theme,
-        active: state.active,
-        difficulty: state.settings.difficulty
+        active: state.active
     }
 };
 
@@ -24,20 +23,6 @@ class MainInterface extends Component {
         document.body.style.backgroundColor = this.props.theme.background;
 
         let current = null;
-
-        let difficulty = 0;
-        switch (this.props.difficulty) {
-            case 'easy':
-                difficulty = 30;
-                break;
-            case 'normal':
-                difficulty = 45;
-                break;
-            case 'hard':
-                difficulty = 55;
-                break;
-        }
-
         switch (this.props.active) {
             case 'menu':
                 current = (
@@ -47,9 +32,7 @@ class MainInterface extends Component {
             case 'board':
                 current = (
                     <Board
-                        rows={ 9 } cols={ 9 }
-                        difficulty={ difficulty }
-                        theme={ this.props.theme } />
+                        rows={ 9 } cols={ 9 } />
                 );
                 break;
         }

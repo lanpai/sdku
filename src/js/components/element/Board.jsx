@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import cloneDeep from 'lodash/cloneDeep';
 import Sudoku from '../../../Sudoku';
 
 import css from '../../../css/element/Board.scss';
@@ -6,21 +8,34 @@ import css from '../../../css/element/Board.scss';
 import Timer from './Timer.jsx';
 import Circle from './Circle.jsx';
 
+const mapStateToProps = state => {
+    return {
+        theme: state.theme,
+        difficulty: state.settings.difficulty,
+        perfect: state.settings.perfect,
+        stopwatch: state.settings.stopwatch
+    }
+};
+
 class Board extends Component {
     constructor() {
         super();
 
         this.checkCount = this.checkCount.bind(this);
+        this.disableGrid = this.disableGrid.bind(this);
         this.handleGridClick = this.handleGridClick.bind(this);
         this.switchControl = this.switchControl.bind(this);
         this.createTable = this.createTable.bind(this);
 
         this.state = {
             values: null,
+            answer: null,
             meta: null,
+            playing: false,
             active: null,
             count: [],
-            complete: false
+            className: '',
+            description: ''
         };
     }
 
@@ -45,32 +60,51 @@ class Board extends Component {
 
         let values = [];
         let meta = [];
-        for (let row = 0; row < 9; row++) {
+        let answer = [];
+
+        for (let y = 0; y < 9; y++) {
             let children = [];
-            for (let col = 0; col < 9; col++)
+            for (let x = 0; x < 9; x++)
                 children.push({
                     isSolid: false,
+                    style: {}
                 });
             values.push([]);
             meta.push(children);
         }
 
-        console.log(this.props.difficulty);
-        values = Sudoku.Generate(this.props.difficulty);
 
-        for (let y = 0; y < values.length; y++) {
-            for (let x = 0; x < values[y].length; x++)
-                if (values[y][x] !== null) meta[y][x].isSolid = true;
+        let difficulty = 0;
+        switch (this.props.difficulty) {
+            case 'easy':
+                values = Sudoku.Generate(30);
+                break;
+            case 'normal':
+                values = Sudoku.Generate(45);
+                break;
+            case 'hard':
+                values = Sudoku.Generate(55);
+                break;
         }
 
-        console.log('timing: ', Date.now() - timeStart);
+        answer = cloneDeep(values);
+        Sudoku.Solve(answer);
+
+        for (let y = 0; y < 9; y++)
+            for (let x = 0; x < 9; x++)
+                if (values[y][x] !== null)
+                    meta[y][x].isSolid = true;
 
         this.state.values = values;
         this.state.meta = meta;
         this.setState({
             values: values,
-            meta: meta
+            meta: meta,
+            answer: answer,
+            playing: true
         });
+
+        console.log('timing: ', Date.now() - timeStart);
     }
 
     checkCount() {
@@ -93,39 +127,51 @@ class Board extends Component {
         return count;
     }
 
+    disableGrid(className) {
+        let newMeta = cloneDeep(this.state.meta);
+        if (className === 'complete') {
+            for (let y = 0; y < newMeta.length; y++) {
+                for (let x = 0; x < newMeta[y].length; x++)
+                    newMeta[y][x].isSolid = true;
+            }
+        }
+
+        this.setState({
+            meta: newMeta,
+            active: null,
+            playing: false,
+            className: className,
+        });
+    }
+
     handleGridClick(x, y, currValue) {
-        if (!this.state.meta[y][x].isSolid) {
+        if (this.state.playing) {
             let newValue = this.state.active;
 
             if (currValue === this.state.active)
                 newValue = null;
 
-            let newValues = this.state.values.slice();
+            let newValues = cloneDeep(this.state.values);
             newValues[y][x] = newValue;
 
-            let newMeta = this.state.meta.slice();
-            newMeta[y][x] = {
-                isSolid: false,
-            };
-
             this.setState({
-                values: newValues,
-                meta: newMeta
+                values: newValues
             });
 
-            if (Sudoku.CheckComplete(this.state.values)) {
-                let newMeta = this.state.meta.slice();
-                for (let ysub = 0; ysub < newMeta.length; ysub++) {
-                    for (let xsub = 0; xsub < newMeta[y].length; xsub++)
-                        newMeta[ysub][xsub].isSolid = true;
-                }
-
+            if (this.props.perfect && this.state.active !== this.state.answer[y][x]) {
+                this.disableGrid('failure');
+                let newValues = cloneDeep(this.state.values);
+                let newMeta = cloneDeep(this.state.meta);
+                newValues[y][x] = `${this.state.active}/${this.state.answer[y][x]}`;
+                newMeta[y][x].style = { color: this.props.theme.error, opacity: 1 };
                 this.setState({
-                    meta: newMeta,
-                    active: null,
-                    complete: true
+                    values: newValues,
+                    meta: newMeta
                 });
             }
+
+            if (Sudoku.CheckComplete(this.state.values))
+                this.disableGrid('complete');
         }
     }
 
@@ -152,7 +198,8 @@ class Board extends Component {
                             key={ col }
                             style={ (col % 3 === 2 ? { borderRightColor: this.props.theme.primary } : {}) }>
                             <Circle
-                                className={ this.state.complete ? 'complete' : '' }
+                                className={ this.state.className }
+                                style={ this.state.meta[row][col].style }
                                 theme={ this.props.theme }
                                 solid={ meta.isSolid }
                                 active={ value === this.state.active && this.state.active !== null }
@@ -209,12 +256,13 @@ class Board extends Component {
                 <div
                     style={{ color: this.props.theme.secondary }}>
                     <span className='title'>sdku</span><br />
-                    <Timer stop={ this.state.complete } />
+                    <Timer stop={ !this.state.playing } /><br />
+                    <span className={ this.state.description ? 'description' : '' }>{ this.state.description }</span>
                 </div>
                 <div>
                     { this.createTable() }
                 </div>
-                <div style={{ display: (this.state.complete) ? 'none' : 'flex' }} className='flex-row control'>
+                <div style={{ display: (this.state.playing) ? 'flex' : 'none' }} className='flex-row control'>
                     { controlRow }
                 </div>
             </>
@@ -222,4 +270,4 @@ class Board extends Component {
     }
 }
 
-export default Board;
+export default connect(mapStateToProps)(Board);

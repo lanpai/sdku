@@ -9,7 +9,8 @@ const initialState = {
         highlight: '#AC9FBB',
         primary: '#DDBDD5',
         secondary: '#59656F',
-        tertiary: '#1D1E2C'
+        tertiary: '#1D1E2C',
+        error: '#ED5858'
     },
     settings: {
         difficulty: 'normal',

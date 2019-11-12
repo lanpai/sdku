@@ -28,10 +28,10 @@ class Menu extends Component {
         return (
             <div className='menu' style={ stylesheet }>
                 <div>
-                    <div className='title'>sdku</div>
-                    <div className='desc'>
+                    <span className='title'>sdku</span><br />
+                    <span>
                         minimalist sudoku
-                    </div>
+                    </span>
                 </div>
                 <div>
                     <div className='flex-row'>

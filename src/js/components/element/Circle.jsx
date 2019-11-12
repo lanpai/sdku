@@ -17,6 +17,7 @@ class Circle extends Component {
         let stylesheet = {
             color: this.props.theme.secondary
         };
+        stylesheet = { ...stylesheet, ...this.props.style };
         if (this.props.solid)
             stylesheet.borderColor = this.props.theme.secondary;
         if (this.props.active) {

@@ -45,8 +45,10 @@ class Board extends Component {
     }
 
     render() {
-        this.props.stop && this.stop();
-        this.props.reset && this.reset();
+        if (this.props.stop)
+            this.stop();
+        if (this.props.reset)
+            this.reset();
 
         let diff = this.state.currTime - this.state.startTime;
         let ms = (diff % 1000).toString().padStart(3, '0');
