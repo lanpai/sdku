@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import cloneDeep from 'lodash/cloneDeep';
 import Sudoku from '../../../Sudoku';
+import { SwitchActive } from '../../../actions';
 
 import css from '../../../css/element/Board.scss';
 
@@ -285,7 +286,7 @@ class Board extends Component {
                     style={{ color: this.props.theme.secondary }}>
                     <span className='title'>sdku</span><br />
                     <Timer stop={ !this.state.playing } />
-                    <div className='button-menu'><span onClick={ this.undo }>undo</span></div>
+                    <div className='button-menu'><span onClick={ this.undo }>undo</span> <span onClick={ () => SwitchActive('menu') }>menu</span></div>
                 </div>
                 <div>
                     { this.createTable() }
