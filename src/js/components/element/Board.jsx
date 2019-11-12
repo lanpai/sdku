@@ -22,6 +22,9 @@ class Board extends Component {
     constructor() {
         super();
 
+        this.resetWatch = this.resetWatch.bind(this);
+        this.startWatch = this.startWatch.bind(this);
+        this.stopWatch = this.stopWatch.bind(this);
         this.checkCount = this.checkCount.bind(this);
         this.disableGrid = this.disableGrid.bind(this);
         this.undo = this.undo.bind(this);
@@ -38,8 +41,34 @@ class Board extends Component {
             count: [],
             className: '',
             description: '',
-            moveHistory: []
+            moveHistory: [],
+            timer: null,
+            currTime: 0,
+            startTime: 0
         };
+    }
+
+    resetWatch() {
+        let now = Date.now();
+
+        this.setState({
+            currTime: now,
+            startTime: now
+        });
+    }
+
+    startWatch() {
+        this.resetWatch();
+
+        this.timer = setInterval(() => {
+            this.setState({
+                currTime: Date.now()
+            });
+        }, 1);
+    }
+
+    stopWatch() {
+        clearInterval(this.timer);
     }
 
     componentDidMount() {
@@ -107,7 +136,13 @@ class Board extends Component {
             playing: true
         });
 
+        this.startWatch();
+
         console.log('timing: ', Date.now() - timeStart);
+    }
+
+    componentWillUnmount() {
+        this.stopWatch();
     }
 
     checkCount() {
@@ -138,6 +173,8 @@ class Board extends Component {
                     newMeta[y][x].isSolid = true;
             }
         }
+
+        this.stopWatch();
 
         this.setState({
             meta: newMeta,
@@ -276,6 +313,8 @@ class Board extends Component {
             );
         }
 
+        let watchDiff = this.state.currTime - this.state.startTime;
+
         let controlClass = 'control';
         if (!this.state.playing)
             controlClass += ' complete';
@@ -285,7 +324,7 @@ class Board extends Component {
                 <div
                     style={{ color: this.props.theme.secondary }}>
                     <span className='title'>sdku</span><br />
-                    <Timer stop={ !this.state.playing } />
+                    <Timer time={ watchDiff } />
                     <div className='button-menu'><span onClick={ this.undo }>undo</span> <span onClick={ () => SwitchActive('menu') }>menu</span></div>
                 </div>
                 <div>
