@@ -14,6 +14,13 @@ function ToggleMode(mode) {
     });
 }
 
+function SetMode(mode, setting) {
+    store.dispatch({
+        type: 'SET_MODE',
+        payload: { mode: mode, setting: setting }
+    });
+}
+
 function SwitchDifficulty(difficulty) {
     store.dispatch({
         type: 'SWITCH_DIFFICULTY',

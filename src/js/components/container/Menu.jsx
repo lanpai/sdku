@@ -11,7 +11,7 @@ const mapStateToProps = state => {
     return {
         difficulty: state.settings.difficulty,
         perfect: state.settings.perfect,
-        stopWatch: state.settings.stopWatch
+        stopwatch: state.settings.stopwatch
     }
 };
 
@@ -55,8 +55,8 @@ class Menu extends Component {
                         <div className='flex-item'>
                             <Circle
                                 theme={ this.props.theme }
-                                active={ this.props.stopWatch }
-                                onClick={ () => ToggleMode('stopWatch') }
+                                active={ this.props.stopwatch }
+                                onClick={ () => ToggleMode('stopwatch') }
                                 sub='mode'>
                                 stopwatch
                             </Circle>

@@ -15,7 +15,8 @@ const initialState = {
     settings: {
         difficulty: 'normal',
         perfect: false,
-        stopWatch: false
+        stopwatch: false,
+        stopwatchSetting: 10
     }
 }
 
@@ -31,6 +32,14 @@ function reducer(state = initialState, action) {
             return update(state, {
                 settings: {
                     $toggle: [ action.payload ]
+                }
+            });
+        case 'SET_MODE':
+            return update(state, {
+                settings: {
+                    [ action.payload.mode ]: {
+                        $set: action.payload.setting
+                    }
                 }
             });
         case 'SWITCH_DIFFICULTY':

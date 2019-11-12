@@ -40,14 +40,14 @@
     border-color: transparent;
 }
 
-.complete {
+.control.complete {
     flex: 0;
-    animation-name: complete-anim;
+    animation-name: control-anim;
     animation-duration: 750ms;
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
-@keyframes complete-anim {
+@keyframes control-anim {
     0% { flex: 0.33 }
     100% { flex: 0 }
 }

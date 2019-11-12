@@ -14,7 +14,8 @@ const mapStateToProps = state => {
         theme: state.theme,
         difficulty: state.settings.difficulty,
         perfect: state.settings.perfect,
-        stopwatch: state.settings.stopwatch
+        stopwatch: state.settings.stopwatch,
+        stopwatchSetting: state.settings.stopwatchSetting
     }
 };
 
@@ -61,8 +62,17 @@ class Board extends Component {
         this.resetWatch();
 
         this.timer = setInterval(() => {
+            let currTime = Date.now();
+
+            if (this.props.stopwatch) {
+                let diff = Date.now() - this.state.startTime;
+                if (diff >= this.props.stopwatchSetting * 1000) {
+                    currTime = this.state.startTime + this.props.stopwatchSetting * 1000;
+                    this.disableGrid('failure');
+                }
+            }
             this.setState({
-                currTime: Date.now()
+                currTime: currTime
             });
         }, 1);
     }
@@ -185,7 +195,7 @@ class Board extends Component {
     }
 
     undo() {
-        if (this.state.moveHistory.length > 0) {
+        if (this.state.playing && this.state.moveHistory.length > 0) {
             let newValues = cloneDeep(this.state.values);
             let latest = this.state.moveHistory[this.state.moveHistory.length - 1];
 
@@ -219,6 +229,11 @@ class Board extends Component {
                 moveHistory: newHistory
             });
 
+            if (Sudoku.CheckComplete(newValues)) {
+                this.disableGrid('complete');
+                return;
+            }
+
             if (this.props.perfect && this.state.active !== this.state.answer[y][x]) {
                 this.disableGrid('failure');
                 let newValues = cloneDeep(this.state.values);
@@ -229,10 +244,11 @@ class Board extends Component {
                     values: newValues,
                     meta: newMeta
                 });
+                return;
             }
 
-            if (Sudoku.CheckComplete(this.state.values))
-                this.disableGrid('complete');
+            if (this.props.stopwatch)
+                this.resetWatch();
         }
     }
 
