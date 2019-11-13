@@ -215,7 +215,7 @@ class Board extends Component {
     }
 
     handleGridClick(x, y, currValue) {
-        if (this.state.playing) {
+        if (this.state.playing && !this.state.meta[y][x].isSolid) {
             let newValue = this.state.active;
 
             if (currValue === this.state.active)
