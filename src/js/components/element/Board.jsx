@@ -194,8 +194,7 @@ class Board extends Component {
             meta: newMeta,
             active: null,
             playing: false,
-            className: className,
-            currTime: this.state.initTime
+            className: className
         });
     }
 
@@ -330,8 +329,10 @@ class Board extends Component {
         }
 
         let watchDiff = this.state.currTime - this.state.startTime;
-        if (this.props.stopwatch || !this.state.playing)
+        if (this.props.stopwatch)
             watchDiff = (this.props.stopwatchSetting * 1000) - watchDiff;
+        if (!this.state.playing)
+            watchDiff = this.state.currTime - this.state.initTime;
 
         let controlClass = 'control';
         if (!this.state.playing)
