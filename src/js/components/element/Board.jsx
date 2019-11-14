@@ -80,7 +80,7 @@ class Board extends Component {
             let currTime = Date.now();
 
             if (this.props.stopwatch) {
-                let diff = Date.now() - this.state.startTime;
+                let diff = currTime - this.state.startTime;
                 if (diff >= this.props.stopwatchSetting * 1000) {
                     currTime = this.state.startTime + this.props.stopwatchSetting * 1000;
                     this.handleEndCondition('failure');
@@ -89,11 +89,14 @@ class Board extends Component {
             this.setState({
                 currTime: currTime
             });
-        }, 1);
+        }, 15);
     }
 
     stopWatch() {
         clearInterval(this.timer);
+        this.setState({
+            currTime: Date.now()
+        });
     }
 
     componentDidMount() {
@@ -117,7 +120,6 @@ class Board extends Component {
 
         let values = [];
         let meta = [];
-        let answer = [];
 
         for (let y = 0; y < 9; y++) {
             let children = [];
@@ -144,7 +146,7 @@ class Board extends Component {
                 break;
         }
 
-        answer = cloneDeep(values);
+        let answer = cloneDeep(values);
         Sudoku.Solve(answer);
 
         for (let y = 0; y < 9; y++)
