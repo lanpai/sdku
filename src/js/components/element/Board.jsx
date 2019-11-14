@@ -134,13 +134,13 @@ class Board extends Component {
         let difficulty = 0;
         switch (this.props.difficulty) {
             case 'easy':
-                values = Sudoku.Generate(30);
+                values = Sudoku.Generate(35);
                 break;
             case 'normal':
                 values = Sudoku.Generate(45);
                 break;
             case 'hard':
-                values = Sudoku.Generate(55);
+                values = Sudoku.Generate(50);
                 break;
         }
 

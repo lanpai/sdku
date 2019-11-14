@@ -46,7 +46,7 @@ function CheckComplete(grid) {
     return true;
 }
 
-function Solve(grid, count = false, y = 0, x = 0) {
+function Solve(grid, count = 0, y = 0, x = 0) {
     if (y === 9)
         return 1;
 
@@ -61,8 +61,11 @@ function Solve(grid, count = false, y = 0, x = 0) {
 
         let childValue = Solve(grid, count, (x === 8) ? y + 1 : y, (x + 1) % 9);
         if (childValue !== 0) {
-            if (count)
+            if (count !== 0) {
                 sum += childValue;
+                if (sum === count)
+                    return sum;
+            }
             else
                 return childValue;
         }
@@ -73,7 +76,7 @@ function Solve(grid, count = false, y = 0, x = 0) {
     return sum;
 }
 
-function CheckNumSolutions(grid, y, x) {
+function CheckNumSolutions(grid, y, x, max) {
     let newGrid = [];
     for (let y = 0; y < grid.length; y++)
         newGrid.push(grid[y].slice());
@@ -81,32 +84,18 @@ function CheckNumSolutions(grid, y, x) {
     if (y !== null && x !== null)
         newGrid[y][x] = null;
 
-    return Solve(newGrid, true);
+    return Solve(newGrid, true, max);
 }
 
-function RemoveTiles(grid, difficulty, i = 0, possible = null) {
+function RemoveTiles(grid, difficulty, possible, i = 0) {
     let newGrid = [];
     for (let y = 0; y < grid.length; y++)
         newGrid.push(grid[y].slice());
 
     if (i !== difficulty) {
-        if (possible === null) {
-            possible = [];
-
-            for (let i = 0; i < 81; i++) {
-                let y = Math.floor(i / 9);
-                let x = i % 9;
-                possible.push([ Math.floor(i / 9), i % 9 ]);
-            }
-
-            possible.sort(() => Math.random() - 0.5);
-        }
-
-        for (let loc = possible.length - 1; loc >= 0; loc--) {
-            if (CheckNumSolutions(newGrid, possible[loc][0], possible[loc][1]) !== 1) {
-                possible.splice(loc, 1)
-            }
-        }
+        for (let loc = possible.length - 1; loc >= 0; loc--)
+            if (CheckNumSolutions(newGrid, possible[loc][0], possible[loc][1], 2) !== 1)
+                possible.splice(loc, 1);
 
         if (possible.length === 0)
             return null;
@@ -117,7 +106,7 @@ function RemoveTiles(grid, difficulty, i = 0, possible = null) {
 
             let newPossible = possible.slice();
             newPossible.splice(loc, 1);
-            let childValue = RemoveTiles(newGrid, difficulty, i + 1, newPossible);
+            let childValue = RemoveTiles(newGrid, difficulty, newPossible, i + 1);
             if (childValue === null) {
                 newGrid[possible[loc][0]][possible[loc][1]] = prevVal;
                 possible.splice(loc, 1);
@@ -134,6 +123,7 @@ function RemoveTiles(grid, difficulty, i = 0, possible = null) {
 }
 
 function Generate(difficulty = 46) {
+    let a = Date.now();
     let grid = [];
     for (let y = 0; y < 9; y++) {
         grid.push([]);
@@ -142,8 +132,24 @@ function Generate(difficulty = 46) {
     }
 
     Solve(grid);
+    let b = Date.now();
 
-    return RemoveTiles(grid, difficulty);
+    let possible = [];
+
+    for (let i = 0; i < 81; i++) {
+        let y = Math.floor(i / 9);
+        let x = i % 9;
+        possible.push([ Math.floor(i / 9), i % 9 ]);
+    }
+
+    possible.sort(() => Math.random() - 0.5);
+
+    let removed = RemoveTiles(grid, difficulty, possible);
+
+    let c = Date.now();
+    console.log(b-a, c-b)
+
+    return removed;
 }
 
 export default { GetPossibleValues, CheckComplete, Solve, Generate };
