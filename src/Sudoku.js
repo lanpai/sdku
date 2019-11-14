@@ -142,9 +142,12 @@ function Generate(difficulty = 46) {
         possible.push([ Math.floor(i / 9), i % 9 ]);
     }
 
-    possible.sort(() => Math.random() - 0.5);
+    let shuffled = [];
+    let initLength = possible.length;
+    for (let i = 0; i < initLength; i++)
+        shuffled.push(possible.splice(Math.floor(Math.random() * possible.length), 1)[0]);
 
-    let removed = RemoveTiles(grid, difficulty, possible);
+    let removed = RemoveTiles(grid, difficulty, shuffled);
 
     let c = Date.now();
     console.log(b-a, c-b)
