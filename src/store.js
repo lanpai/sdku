@@ -2,6 +2,15 @@ import { createStore } from 'redux';
 
 import update from 'immutability-helper';
 
+const savedState = {
+    settings: {
+        difficulty: localStorage.getItem('settings.difficulty'),
+        perfect: localStorage.getItem('settings.perfect') === 'true',
+        stopwatch: localStorage.getItem('settings.stopwatch') === 'true',
+        stopwatchSetting: parseInt(localStorage.getItem('settings.stopwatchSetting'))
+    }
+}
+
 const initialState = {
     active: 'menu',
     theme: {
@@ -17,7 +26,8 @@ const initialState = {
         perfect: false,
         stopwatch: false,
         stopwatchSetting: 10
-    }
+    },
+    ...savedState
 }
 
 function reducer(state = initialState, action) {
@@ -29,12 +39,14 @@ function reducer(state = initialState, action) {
                 }
             });
         case 'TOGGLE_MODE':
+            localStorage.setItem(`settings.${action.payload}`, !state.settings[action.payload]);
             return update(state, {
                 settings: {
                     $toggle: [ action.payload ]
                 }
             });
         case 'SET_MODE':
+            localStorage.setItem(`settings.${action.payload.mode}`, action.payload.setting);
             return update(state, {
                 settings: {
                     [ action.payload.mode ]: {
@@ -43,6 +55,7 @@ function reducer(state = initialState, action) {
                 }
             });
         case 'SWITCH_DIFFICULTY':
+            localStorage.setItem('settings.difficulty', action.payload);
             return update(state, {
                 settings: {
                     difficulty: {
