@@ -250,6 +250,9 @@ class Board extends Component {
             if (currValue === this.state.active)
                 newValue = null;
 
+            if (this.props.perfect && newValue === null)
+                return;
+
             let newValues = cloneDeep(this.state.values);
             newValues[y][x] = newValue;
 
@@ -368,13 +371,20 @@ class Board extends Component {
         if (!this.state.playing)
             controlClass += ' complete';
 
+        let undoButton = null;
+        if (!this.props.perfect)
+            undoButton = <span onClick={ this.undo }>undo&nbsp;</span>;
+
         return (
             <>
                 <div
                     style={{ color: this.props.theme.secondary }}>
                     <span className='title'>sdku</span><br />
                     <Timer time={ watchDiff } />
-                    <div className='button-menu'><span onClick={ this.undo }>undo</span> <span onClick={ () => SwitchActive('menu') }>menu</span></div>
+                    <div className='button-menu'>
+                        { undoButton }
+                        <span onClick={ () => SwitchActive('menu') }>menu</span>
+                    </div>
                 </div>
                 <div>
                     { this.createTable() }
