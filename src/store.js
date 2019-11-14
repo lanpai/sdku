@@ -14,8 +14,8 @@ const initialState = {
     },
     settings: {
         difficulty: localStorage.getItem('settings.difficulty') || 'normal',
-        perfect: localStorage.getItem('settings.perfect') === true,
-        stopwatch: localStorage.getItem('settings.stopwatch') === true,
+        perfect: localStorage.getItem('settings.perfect') === 'true',
+        stopwatch: localStorage.getItem('settings.stopwatch') === 'true',
         stopwatchSetting: parseInt(localStorage.getItem('settings.stopwatchSetting')) || 10
     },
     leaderboard: {
