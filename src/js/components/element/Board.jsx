@@ -39,6 +39,7 @@ class Board extends Component {
         this.checkCount = this.checkCount.bind(this);
         this.handleEndCondition = this.handleEndCondition.bind(this);
         this.undo = this.undo.bind(this);
+        this.clear = this.clear.bind(this);
         this.handleGridClick = this.handleGridClick.bind(this);
         this.switchControl = this.switchControl.bind(this);
         this.createTable = this.createTable.bind(this);
@@ -243,6 +244,20 @@ class Board extends Component {
         }
     }
 
+    clear() {
+        if (this.state.playing) {
+            let newValues = cloneDeep(this.state.values);
+            for (let y = 0; y < this.state.meta.length; y++)
+                for (let x = 0; x < this.state.meta[y].length; x++)
+                    if (!this.state.meta[y][x].isSolid)
+                        newValues[y][x] = null;
+
+            this.setState({
+                values: newValues
+            });
+        }
+    }
+
     handleGridClick(x, y, currValue) {
         if (this.state.playing && !this.state.meta[y][x].isSolid) {
             let newValue = this.state.active;
@@ -372,8 +387,11 @@ class Board extends Component {
             controlClass += ' complete';
 
         let undoButton = null;
-        if (!this.props.perfect)
+        let clearButton = null;
+        if (!this.props.perfect) {
             undoButton = <span onClick={ this.undo }>undo&nbsp;</span>;
+            clearButton = <span onClick={ this.clear }>clear&nbsp;</span>;
+        }
 
         return (
             <>
@@ -382,6 +400,7 @@ class Board extends Component {
                     <span className='title'>sdku</span><br />
                     <Timer time={ watchDiff } />
                     <div className='button-menu'>
+                        { clearButton }
                         { undoButton }
                         <span onClick={ () => SwitchActive('menu') }>menu</span>
                     </div>
