@@ -39,6 +39,21 @@
     border-right-style: none;
 }
 
+.scoreboard {
+    display: flex;
+}
+.scoreboard>summary {
+    font-size: 2vh;
+}
+.scoreboard[open] summary ~ * {
+    animation-name: details-anim;
+    animation-duration: 1s;
+}
+@keyframes details-anim {
+    0% { opacity: 0; margin-left: -10vh; margin-right: 10vh; }
+    100% { opacity: 1; margin-left: 0vh; margin-right: 0; }
+}
+
 .score {
     display: flex;
     border-top-style: solid;

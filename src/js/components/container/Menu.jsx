@@ -114,9 +114,10 @@ class Menu extends Component {
                         </div>
                     </div>
                 </div>
-                <div>
+                <details className='scoreboard'>
+                    <summary>scoreboard</summary>
                     { lbComponent }
-                </div>
+                </details>
             </div>
         );
     }
