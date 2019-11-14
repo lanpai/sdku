@@ -2,15 +2,6 @@ import { createStore } from 'redux';
 
 import update from 'immutability-helper';
 
-const savedState = {
-    settings: {
-        difficulty: localStorage.getItem('settings.difficulty'),
-        perfect: localStorage.getItem('settings.perfect') === 'true',
-        stopwatch: localStorage.getItem('settings.stopwatch') === 'true',
-        stopwatchSetting: parseInt(localStorage.getItem('settings.stopwatchSetting'))
-    }
-}
-
 const initialState = {
     active: 'menu',
     theme: {
@@ -22,12 +13,16 @@ const initialState = {
         error: '#ED5858'
     },
     settings: {
-        difficulty: 'normal',
-        perfect: false,
-        stopwatch: false,
-        stopwatchSetting: 10
+        difficulty: localStorage.getItem('settings.difficulty') || 'normal',
+        perfect: localStorage.getItem('settings.perfect') === true,
+        stopwatch: localStorage.getItem('settings.stopwatch') === true,
+        stopwatchSetting: parseInt(localStorage.getItem('settings.stopwatchSetting')) || 10
     },
-    ...savedState
+    leaderboard: {
+        easy: JSON.parse(localStorage.getItem('leaderboard.easy')) || [],
+        normal: JSON.parse(localStorage.getItem('leaderboard.normal')) || [],
+        hard: JSON.parse(localStorage.getItem('leaderboard.hard')) || []
+    }
 }
 
 function reducer(state = initialState, action) {
@@ -60,6 +55,17 @@ function reducer(state = initialState, action) {
                 settings: {
                     difficulty: {
                         $set: action.payload
+                    }
+                }
+            });
+        case 'SUBMIT_SCORE':
+            let leaderboard = state.leaderboard[action.payload.difficulty];
+            leaderboard.push(action.payload.score);
+            localStorage.setItem(`leaderboard.${action.payload.difficulty}`, JSON.stringify(leaderboard));
+            return update(state, {
+                leaderboard: {
+                    [ action.payload.difficulty ]: {
+                        $set: leaderboard
                     }
                 }
             });

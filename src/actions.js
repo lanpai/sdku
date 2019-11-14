@@ -28,4 +28,18 @@ function SwitchDifficulty(difficulty) {
     });
 }
 
-export { SwitchActive, ToggleMode, SwitchDifficulty };
+function SubmitScore(difficulty, time, mods) {
+    store.dispatch({
+        type: 'SUBMIT_SCORE',
+        payload: {
+            difficulty: difficulty,
+            score: {
+                date: Date.now(),
+                time: time,
+                mods: mods
+            }
+        }
+    });
+}
+
+export { SwitchActive, ToggleMode, SwitchDifficulty, SubmitScore };

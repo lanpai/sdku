@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import orderBy from 'lodash/orderBy';
 
 import css from '../../../css/container/Menu.scss';
 
@@ -11,7 +12,8 @@ const mapStateToProps = state => {
     return {
         difficulty: state.settings.difficulty,
         perfect: state.settings.perfect,
-        stopwatch: state.settings.stopwatch
+        stopwatch: state.settings.stopwatch,
+        leaderboard: state.leaderboard[state.settings.difficulty]
     }
 };
 
@@ -24,6 +26,26 @@ class Menu extends Component {
         let stylesheet = {
             color: this.props.theme.secondary
         };
+
+        let leaderboard = orderBy(this.props.leaderboard, [ 'time' ], [ 'asc' ]);
+        let lbComponent = [];
+        for (let i = 0; i < (leaderboard.length > 5 ? 5 : leaderboard.length); i++) {
+            let date = new Date(leaderboard[i].date);
+            let ms = (leaderboard[i].time % 1000).toString().padStart(3, '0');
+            let seconds = Math.floor((leaderboard[i].time % 60000) / 1000).toString().padStart(2, '0');
+            let minutes = Math.floor(leaderboard[i].time / 60000);
+
+            let mods = '';
+            for (let mod of leaderboard[i].mods)
+                mods += ` ${mod}`
+
+            lbComponent.push(
+                <div key={ i } className='score'>
+                    <div>{ date.getFullYear() }-{ date.getMonth() }-{ date.getDate() } - { minutes }:{ seconds }:{ ms }</div>
+                    <div>{ mods }</div>
+                </div>
+            );
+        }
 
         return (
             <div className='menu' style={ stylesheet }>
@@ -91,6 +113,9 @@ class Menu extends Component {
                             </Circle>
                         </div>
                     </div>
+                </div>
+                <div>
+                    { lbComponent }
                 </div>
             </div>
         );

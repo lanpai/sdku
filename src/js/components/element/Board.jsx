@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import cloneDeep from 'lodash/cloneDeep';
+import filter from 'lodash/filter';
 import Sudoku from '../../../Sudoku';
-import { SwitchActive } from '../../../actions';
+import { SwitchActive, SubmitScore } from '../../../actions';
 
 import css from '../../../css/element/Board.scss';
 
@@ -10,12 +11,21 @@ import Timer from './Timer.jsx';
 import Circle from './Circle.jsx';
 
 const mapStateToProps = state => {
+    let leaderboard = filter(state.leaderboard[state.settings.difficulty], score => {
+        if (state.settings.perfect && score.mods.indexOf('perfect') === -1)
+            return false;
+        if (state.settings.stopwatch && score.mods.indexOf(`stopwatch (${state.settings.stopwatchSetting}s)`) === -1)
+            return false;
+        return true;
+    });
+
     return {
         theme: state.theme,
         difficulty: state.settings.difficulty,
         perfect: state.settings.perfect,
         stopwatch: state.settings.stopwatch,
-        stopwatchSetting: state.settings.stopwatchSetting
+        stopwatchSetting: state.settings.stopwatchSetting,
+        leaderboard: leaderboard
     }
 };
 
@@ -27,7 +37,7 @@ class Board extends Component {
         this.startWatch = this.startWatch.bind(this);
         this.stopWatch = this.stopWatch.bind(this);
         this.checkCount = this.checkCount.bind(this);
-        this.disableGrid = this.disableGrid.bind(this);
+        this.handleEndCondition = this.handleEndCondition.bind(this);
         this.undo = this.undo.bind(this);
         this.handleGridClick = this.handleGridClick.bind(this);
         this.switchControl = this.switchControl.bind(this);
@@ -72,7 +82,7 @@ class Board extends Component {
                 let diff = Date.now() - this.state.startTime;
                 if (diff >= this.props.stopwatchSetting * 1000) {
                     currTime = this.state.startTime + this.props.stopwatchSetting * 1000;
-                    this.disableGrid('failure');
+                    this.handleEndCondition('failure');
                 }
             }
             this.setState({
@@ -179,16 +189,36 @@ class Board extends Component {
         return count;
     }
 
-    disableGrid(className) {
+    handleEndCondition(className) {
+        this.stopWatch();
+
         let newMeta = cloneDeep(this.state.meta);
         if (className === 'complete') {
             for (let y = 0; y < newMeta.length; y++) {
                 for (let x = 0; x < newMeta[y].length; x++)
                     newMeta[y][x].isSolid = true;
             }
-        }
 
-        this.stopWatch();
+            let diff = this.state.currTime - this.state.initTime;
+            console.log('completion time:', diff);
+            let isTop = true;
+            for (let score of this.props.leaderboard) {
+                if (score.time < diff) {
+                    isTop = false;
+                    break;
+                }
+            }
+
+            if (isTop) {
+                console.log('highscore');
+                let mods = [];
+                if (this.props.perfect)
+                    mods.push('perfect');
+                if (this.props.stopwatch)
+                    mods.push(`stopwatch (${this.props.stopwatchSetting}s)`);
+                SubmitScore(this.props.difficulty, diff, mods);
+            }
+        }
 
         this.setState({
             meta: newMeta,
@@ -230,12 +260,12 @@ class Board extends Component {
             });
 
             if (Sudoku.CheckComplete(newValues)) {
-                this.disableGrid('complete');
+                this.handleEndCondition('complete');
                 return;
             }
 
             if (this.props.perfect && this.state.active !== this.state.answer[y][x]) {
-                this.disableGrid('failure');
+                this.handleEndCondition('failure');
                 let newValues = cloneDeep(this.state.values);
                 let newMeta = cloneDeep(this.state.meta);
                 newValues[y][x] = `${this.state.active}/${this.state.answer[y][x]}`;

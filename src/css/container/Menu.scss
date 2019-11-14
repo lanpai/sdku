@@ -39,3 +39,20 @@
     border-right-style: none;
 }
 
+.score {
+    display: flex;
+    border-top-style: solid;
+    border-width: 0.1vh;
+}
+.score:last-child {
+    border-bottom-style: solid;
+}
+
+.score>* {
+    flex: 1;
+    font-size: 2vh;
+}
+.score>*:last-child {
+    flex: 2;
+    text-align: right;
+}
