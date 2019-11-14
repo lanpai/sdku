@@ -115,7 +115,7 @@ class Menu extends Component {
                     </div>
                 </div>
                 <details className='scoreboard'>
-                    <summary>scoreboard</summary>
+                    <summary>scoreboard ({ this.props.difficulty })</summary>
                     { lbComponent }
                 </details>
             </div>
