@@ -94,9 +94,6 @@ class Board extends Component {
 
     stopWatch() {
         clearInterval(this.timer);
-        this.setState({
-            currTime: Date.now()
-        });
     }
 
     componentDidMount() {
@@ -202,8 +199,8 @@ class Board extends Component {
                     newMeta[y][x].isSolid = true;
             }
 
+            this.state.currTime = Date.now();
             let diff = this.state.currTime - this.state.initTime;
-            console.log('completion time:', diff);
             let isTop = true;
             for (let score of this.props.leaderboard) {
                 if (score.time < diff) {
@@ -213,7 +210,6 @@ class Board extends Component {
             }
 
             if (isTop) {
-                console.log('highscore');
                 let mods = [];
                 if (this.props.perfect)
                     mods.push('perfect');
