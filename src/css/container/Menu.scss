@@ -41,8 +41,6 @@
 
 .scoreboard {
     display: flex;
-}
-.scoreboard>summary {
     font-size: 2vh;
 }
 .scoreboard[open] summary ~ * {
@@ -55,19 +53,14 @@
 }
 
 .score {
-    display: flex;
     border-top-style: solid;
     border-width: 0.1vh;
+    padding: 0 1vw;
 }
 .score:last-child {
     border-bottom-style: solid;
 }
 
-.score>* {
-    flex: 1;
-    font-size: 2vh;
-}
 .score>*:last-child {
-    flex: 2;
-    text-align: right;
+    float: right;
 }
