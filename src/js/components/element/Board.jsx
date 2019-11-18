@@ -374,7 +374,7 @@ class Board extends Component {
                         solid
                         active={ i === this.state.active }
                         onClick={ this.switchControl }
-                        sub={ 9 - count[i - 1] }>
+                        sub={ this.props.handicap ? null : 9 - count[i - 1] }>
                         { i }
                     </Circle>
                 </div>

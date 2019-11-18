@@ -28,7 +28,7 @@ class Circle extends Component {
         return (
             <div className='circle' onClick={ this.onClick }>
                 <div className={ this.props.className } style={ stylesheet }>
-                    <div className={ this.props.sub !== null ? 'top' : '' }>
+                    <div className='top'>
                         { this.props.children }
                     </div>
                     <div className='sub'>
