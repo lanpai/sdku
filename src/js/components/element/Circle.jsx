@@ -24,6 +24,8 @@ class Circle extends Component {
             stylesheet.color = this.props.theme.background;
             stylesheet.backgroundColor = this.props.theme.primary;
         }
+        if (!this.props.children)
+            stylesheet.opacity = 0;
 
         return (
             <div className='circle' onClick={ this.onClick }>
