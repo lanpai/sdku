@@ -7,12 +7,9 @@
     border-width: 0.2vh;
 }
 
-.flex-row:nth-of-type(3n) {
+.board>.flex-row:nth-of-type(3n):not(:last-child) {
     border-bottom-style: solid;
     border-bottom-width: 0.4vh;
-}
-.flex-row:last-child {
-    border-bottom-style: none;
 }
 
 .flex-item {
@@ -28,12 +25,9 @@
     padding-top: 100%;
 }
 
-.flex-item:nth-child(3n) {
+.board>.flex-row>.flex-item:nth-child(3n):not(:last-child) {
     border-right-style: solid;
     border-right-width: 0.4vh;
-}
-.flex-item:last-child {
-    border-right-style: none;
 }
 
 .control>* {

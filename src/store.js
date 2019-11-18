@@ -16,7 +16,8 @@ const initialState = {
         difficulty: localStorage.getItem('settings.difficulty') || 'normal',
         perfect: localStorage.getItem('settings.perfect') === 'true',
         stopwatch: localStorage.getItem('settings.stopwatch') === 'true',
-        stopwatchSetting: parseInt(localStorage.getItem('settings.stopwatchSetting')) || 10
+        stopwatchSetting: parseInt(localStorage.getItem('settings.stopwatchSetting')) || 10,
+        handicap: localStorage.getItem('settings.handicap') === 'true'
     },
     leaderboard: {
         easy: JSON.parse(localStorage.getItem('leaderboard.easy')) || [],

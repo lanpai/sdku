@@ -25,6 +25,7 @@ const mapStateToProps = state => {
         perfect: state.settings.perfect,
         stopwatch: state.settings.stopwatch,
         stopwatchSetting: state.settings.stopwatchSetting,
+        handicap: state.settings.handicap,
         leaderboard: leaderboard
     }
 };
@@ -140,6 +141,9 @@ class Board extends Component {
                 break;
             case 'hard':
                 values = Sudoku.Generate(50);
+                break;
+            case 'extra':
+                values = Sudoku.Generate(55);
                 break;
         }
 
@@ -325,7 +329,10 @@ class Board extends Component {
                                 style={ this.state.meta[row][col].style }
                                 theme={ this.props.theme }
                                 solid={ meta.isSolid }
-                                active={ value === this.state.active && this.state.active !== null }
+                                active={
+                                    value === this.state.active && this.state.active !== null &&
+                                    !this.props.handicap
+                                }
                                 row={ row }
                                 col={ col }
                                 onClick={ this.handleGridClick }>
@@ -403,7 +410,7 @@ class Board extends Component {
                         <span onClick={ () => SwitchActive('menu') }>menu</span>
                     </div>
                 </div>
-                <div>
+                <div className='board'>
                     { this.createTable() }
                 </div>
                 <div className={ controlClass }>

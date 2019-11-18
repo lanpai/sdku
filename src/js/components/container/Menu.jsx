@@ -13,6 +13,7 @@ const mapStateToProps = state => {
         difficulty: state.settings.difficulty,
         perfect: state.settings.perfect,
         stopwatch: state.settings.stopwatch,
+        handicap: state.settings.handicap,
         leaderboard: state.leaderboard[state.settings.difficulty]
     }
 };
@@ -60,6 +61,14 @@ class Menu extends Component {
                         <div className='flex-item'>
                             <Circle
                                 theme={ this.props.theme }
+                                solid
+                                onClick={ () => SwitchActive('board') }>
+                                start
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
                                 active={ this.props.perfect }
                                 onClick={ () => ToggleMode('perfect') }
                                 sub='mode'>
@@ -69,18 +78,19 @@ class Menu extends Component {
                         <div className='flex-item'>
                             <Circle
                                 theme={ this.props.theme }
-                                solid
-                                onClick={ () => SwitchActive('board') }>
-                                start
+                                active={ this.props.stopwatch }
+                                onClick={ () => ToggleMode('stopwatch') }
+                                sub='mode'>
+                                stopwatch
                             </Circle>
                         </div>
                         <div className='flex-item'>
                             <Circle
                                 theme={ this.props.theme }
-                                active={ this.props.stopwatch }
-                                onClick={ () => ToggleMode('stopwatch') }
+                                active={ this.props.handicap }
+                                onClick={ () => ToggleMode('handicap') }
                                 sub='mode'>
-                                stopwatch
+                                handicap
                             </Circle>
                         </div>
                     </div>
@@ -110,6 +120,15 @@ class Menu extends Component {
                                 onClick={ () => SwitchDifficulty('hard') }
                                 sub='difficulty'>
                                 hard
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                active={ this.props.difficulty === 'extra' }
+                                onClick={ () => SwitchDifficulty('extra') }
+                                sub='difficulty'>
+                                extra
                             </Circle>
                         </div>
                     </div>
