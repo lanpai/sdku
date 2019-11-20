@@ -6,13 +6,8 @@ import update from 'immutability-helper';
 const initialState = {
     active: 'menu',
     theme: {
-        name: 'blossom',
-        background: '#F7EBEC',
-        highlight: '#AC9FBB',
-        primary: '#DDBDD5',
-        secondary: '#59656F',
-        tertiary: '#1D1E2C',
-        error: '#ED5858'
+        name: localStorage.getItem('settings.theme.name') || 'blossom',
+        ...GetTheme(localStorage.getItem('settings.theme.name') || 'blossom')
     },
     settings: {
         difficulty: localStorage.getItem('settings.difficulty') || 'normal',
@@ -73,6 +68,7 @@ function reducer(state = initialState, action) {
                 }
             });
         case 'SWITCH_THEME':
+            localStorage.setItem(`settings.theme.name`, action.payload.theme);
             return update(state, {
                 theme: {
                     $set: GetTheme(action.payload.theme)
