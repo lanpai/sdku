@@ -6,7 +6,7 @@ import css from '../../../css/container/Menu.scss';
 
 import Circle from '../element/Circle.jsx';
 
-import { SwitchActive, ToggleMode, SwitchDifficulty } from '../../../actions';
+import { SwitchActive, ToggleMode, SwitchDifficulty, SwitchTheme } from '../../../actions';
 
 const mapStateToProps = state => {
     return {
@@ -123,12 +123,54 @@ class Menu extends Component {
                             </Circle>
                         </div>
                         <div className='flex-item'>
+                        </div>
+                    </div>
+                </div>
+                <div className='theme-row'>
+                    <div className='flex-row'>
+                        <div className='flex-item'>
                             <Circle
                                 theme={ this.props.theme }
-                                active={ this.props.difficulty === 'extra' }
-                                onClick={ () => SwitchDifficulty('extra') }
-                                sub='difficulty'>
-                                extra
+                                active={ this.props.theme.name === 'blossom' }
+                                onClick={ () => SwitchTheme('blossom') }
+                                sub='blossom'>
+                                花
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                active={ this.props.theme.name === 'midnight' }
+                                onClick={ () => SwitchTheme('midnight') }
+                                sub='midnight'>
+                                夜
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                active={ this.props.theme.name === 'ash' }
+                                onClick={ () => SwitchTheme('ash') }
+                                sub='ash'>
+                                灰
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                active={ this.props.theme.name === 'mocha' }
+                                onClick={ () => SwitchTheme('mocha') }
+                                sub='mocha'>
+                                モ
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                active={ this.props.theme.name === 'matcha' }
+                                onClick={ () => SwitchTheme('matcha') }
+                                sub='matcha'>
+                                茶
                             </Circle>
                         </div>
                     </div>

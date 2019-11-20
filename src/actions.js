@@ -42,4 +42,13 @@ function SubmitScore(difficulty, time, mods) {
     });
 }
 
-export { SwitchActive, ToggleMode, SwitchDifficulty, SubmitScore };
+function SwitchTheme(theme) {
+    store.dispatch({
+        type: 'SWITCH_THEME',
+        payload: {
+            theme: theme
+        }
+    });
+}
+
+export { SwitchActive, ToggleMode, SwitchDifficulty, SubmitScore, SwitchTheme };

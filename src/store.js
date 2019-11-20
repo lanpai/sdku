@@ -1,10 +1,12 @@
 import { createStore } from 'redux';
+import GetTheme from './themes';
 
 import update from 'immutability-helper';
 
 const initialState = {
     active: 'menu',
     theme: {
+        name: 'blossom',
         background: '#F7EBEC',
         highlight: '#AC9FBB',
         primary: '#DDBDD5',
@@ -68,6 +70,12 @@ function reducer(state = initialState, action) {
                     [ action.payload.difficulty ]: {
                         $set: leaderboard
                     }
+                }
+            });
+        case 'SWITCH_THEME':
+            return update(state, {
+                theme: {
+                    $set: GetTheme(action.payload.theme)
                 }
             });
         default:
