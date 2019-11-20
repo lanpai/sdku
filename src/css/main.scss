@@ -36,3 +36,30 @@ div {
     line-height: 5.5vh;
     font-weight: bold;
 }
+
+.flex-row {
+    display: flex;
+    flex: 1 0 0;
+    justify-content: space-around;
+}
+.flex-row:not(:last-child)>.flex-item {
+    border-bottom-style: dotted;
+    border-width: 0.2vh;
+}
+
+.flex-item {
+    flex: 1 0 0;
+
+    border-width: 0.2vh;
+    border-color: inherit;
+}
+.flex-item:before {
+    content: '';
+    float: left;
+    padding-top: 100%;
+}
+.flex-item:not(:last-child) {
+    border-right-style: dotted;
+    border-width: 0.2vh;
+    border-color: inherit;
+}

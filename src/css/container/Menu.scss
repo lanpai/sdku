@@ -2,34 +2,6 @@
     margin: 2vh 0;
 }
 
-.flex-row {
-    display: flex;
-    justify-content: space-around;
-
-    border-bottom-style: dotted;
-    border-width: 0.2vh;
-}
-.flex-row:last-child {
-    border-bottom-style: none;
-}
-
-.flex-item {
-    flex: 1 0 0;
-
-    border-right-style: dotted;
-    border-width: 0.2vh;
-    border-color: inherit;
-}
-.flex-item:before {
-    content: '';
-    float: left;
-    padding-top: 100%;
-}
-
-.flex-item:last-child {
-    border-right-style: none;
-}
-
 .scoreboard {
     display: flex;
     font-size: 2vh;

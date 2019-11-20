@@ -1,33 +1,11 @@
-.flex-row {
-    display: flex;
-    flex: 1;
-    justify-content: space-around;
-
-    border-bottom-style: dotted;
-    border-width: 0.2vh;
-}
-
-.board>.flex-row:nth-of-type(3n):not(:last-child) {
+.board>.flex-row:nth-of-type(3n):not(:last-child)>.flex-item {
     border-bottom-style: solid;
-    border-bottom-width: 0.4vh;
-}
-
-.flex-item {
-    flex: 1 0 0;
-
-    border-right-style: dotted;
-    border-width: 0.2vh;
-    border-color: inherit;
-}
-.flex-item:before {
-    content: '';
-    float: left;
-    padding-top: 100%;
+    border-bottom-width: 0.3vh;
 }
 
 .board>.flex-row>.flex-item:nth-child(3n):not(:last-child) {
     border-right-style: solid;
-    border-right-width: 0.4vh;
+    border-right-width: 0.3vh;
 }
 
 .control>* {
