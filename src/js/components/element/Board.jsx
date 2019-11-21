@@ -25,7 +25,8 @@ const mapStateToProps = state => {
         perfect: state.settings.perfect,
         stopwatch: state.settings.stopwatch,
         stopwatchSetting: state.settings.stopwatchSetting,
-        handicap: state.settings.handicap,
+        expert: state.settings.expert,
+        rotary: state.settings.rotary,
         leaderboard: leaderboard
     }
 };
@@ -306,6 +307,25 @@ class Board extends Component {
 
             if (this.props.stopwatch)
                 this.resetWatch();
+
+            if (this.props.rotary) {
+                let rotatedValues = [];
+                let rotatedMeta = [];
+
+                for (let ysub = 0; ysub < 9; ysub++) {
+                    rotatedValues.push([]);
+                    rotatedMeta.push([]);
+                    for (let xsub = 0; xsub < 9; xsub++) {
+                        rotatedValues[ysub][xsub] = newValues[xsub][-ysub + 8];
+                        rotatedMeta[ysub][xsub] = this.state.meta[xsub][-ysub + 8];
+                    }
+                }
+
+                this.setState({
+                    values: rotatedValues,
+                    meta: rotatedMeta
+                });
+            }
         }
     }
 
@@ -338,7 +358,7 @@ class Board extends Component {
                                 solid={ meta.isSolid }
                                 active={
                                     value === this.state.active && this.state.active !== null &&
-                                    !this.props.handicap
+                                    !this.props.expert
                                 }
                                 row={ row }
                                 col={ col }
@@ -381,7 +401,7 @@ class Board extends Component {
                         solid
                         active={ i === this.state.active }
                         onClick={ this.switchControl }
-                        sub={ this.props.handicap ? null : 9 - count[i - 1] }>
+                        sub={ this.props.expert ? null : 9 - count[i - 1] }>
                         { i }
                     </Circle>
                 </div>

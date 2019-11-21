@@ -14,7 +14,8 @@ const initialState = {
         perfect: localStorage.getItem('settings.perfect') === 'true',
         stopwatch: localStorage.getItem('settings.stopwatch') === 'true',
         stopwatchSetting: parseInt(localStorage.getItem('settings.stopwatchSetting')) || 10,
-        expert: localStorage.getItem('settings.expert') === 'true'
+        expert: localStorage.getItem('settings.expert') === 'true',
+        rotary: localStorage.getItem('settings.rotary') === 'true'
     },
     leaderboard: {
         easy: JSON.parse(localStorage.getItem('leaderboard.easy')) || [],

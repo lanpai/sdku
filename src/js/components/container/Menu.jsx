@@ -14,6 +14,7 @@ const mapStateToProps = state => {
         perfect: state.settings.perfect,
         stopwatch: state.settings.stopwatch,
         expert: state.settings.expert,
+        rotary: state.settings.rotary,
         leaderboard: state.leaderboard[state.settings.difficulty]
     }
 };
@@ -87,10 +88,19 @@ class Menu extends Component {
                         <div className='flex-item'>
                             <Circle
                                 theme={ this.props.theme }
-                                active={ this.props.expert}
+                                active={ this.props.expert }
                                 onClick={ () => ToggleMode('expert') }
                                 sub='mode'>
                                 expert
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                active={ this.props.rotary }
+                                onClick={ () => ToggleMode('rotary') }
+                                sub='mode'>
+                                rotary
                             </Circle>
                         </div>
                     </div>
@@ -121,8 +131,6 @@ class Menu extends Component {
                                 sub='difficulty'>
                                 hard
                             </Circle>
-                        </div>
-                        <div className='flex-item'>
                         </div>
                     </div>
                 </div>
