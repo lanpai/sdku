@@ -13,7 +13,7 @@ const mapStateToProps = state => {
         difficulty: state.settings.difficulty,
         perfect: state.settings.perfect,
         stopwatch: state.settings.stopwatch,
-        handicap: state.settings.handicap,
+        expert: state.settings.expert,
         leaderboard: state.leaderboard[state.settings.difficulty]
     }
 };
@@ -87,10 +87,10 @@ class Menu extends Component {
                         <div className='flex-item'>
                             <Circle
                                 theme={ this.props.theme }
-                                active={ this.props.handicap }
-                                onClick={ () => ToggleMode('handicap') }
+                                active={ this.props.expert}
+                                onClick={ () => ToggleMode('expert') }
                                 sub='mode'>
-                                handicap
+                                expert
                             </Circle>
                         </div>
                     </div>
