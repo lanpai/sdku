@@ -289,7 +289,14 @@ class Board extends Component {
                 let newValues = cloneDeep(this.state.values);
                 let newMeta = cloneDeep(this.state.meta);
                 newValues[y][x] = `${this.state.active}/${this.state.answer[y][x]}`;
-                newMeta[y][x].style = { color: this.props.theme.error, opacity: 1 };
+                newMeta[y][x] = {
+                    isSolid: true,
+                    style: {
+                        color: this.props.theme.error,
+                        borderColor: this.props.theme.error,
+                        opacity: 1
+                    }
+                };
                 this.setState({
                     values: newValues,
                     meta: newMeta
