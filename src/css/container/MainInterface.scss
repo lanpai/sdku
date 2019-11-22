@@ -14,7 +14,7 @@
     overflow: hidden;
 }
 
-#main-interface>*:not(.complete) {
+#main-interface>*:not(.complete):not(.board) {
     animation-name: transition-anim;
     animation-duration: 1s;
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);

@@ -59,7 +59,8 @@ class Board extends Component {
             timer: null,
             currTime: 0,
             startTime: 0,
-            initTime: 0
+            initTime: 0,
+            animationStarted: false
         };
     }
 
@@ -262,7 +263,7 @@ class Board extends Component {
     }
 
     handleGridClick(x, y, currValue) {
-        if (this.state.playing && !this.state.meta[y][x].isSolid) {
+        if (this.state.playing && !this.state.meta[y][x].isSolid && !this.state.animationStarted) {
             let newValue = this.state.active;
 
             if (currValue === this.state.active)
@@ -323,8 +324,15 @@ class Board extends Component {
 
                 this.setState({
                     values: rotatedValues,
-                    meta: rotatedMeta
+                    meta: rotatedMeta,
+                    animationStarted: true
                 });
+
+                setTimeout(() => {
+                    this.setState({
+                        animationStarted: false
+                    });
+                }, 400);
             }
         }
     }
@@ -425,6 +433,12 @@ class Board extends Component {
             clearButton = <span onClick={ this.clear }>clear&nbsp;</span>;
         }
 
+        let rotationStyle = {};
+        if (this.state.animationStarted) {
+            rotationStyle.animationName = 'board-rotate-anim';
+            rotationStyle.animationDuration = '400ms';
+        }
+
         return (
             <>
                 <div
@@ -437,7 +451,9 @@ class Board extends Component {
                         <span onClick={ () => SwitchActive('menu') }>menu</span>
                     </div>
                 </div>
-                <div className='board'>
+                <div
+                    className={ 'board' + (this.state.animationStarted ? ' rotate' : '') }
+                    style={ rotationStyle }>
                     { this.createTable() }
                 </div>
                 <div className={ controlClass }>

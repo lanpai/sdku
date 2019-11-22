@@ -8,6 +8,25 @@
     border-right-width: 0.3vh;
 }
 
+.rotate>.flex-row>.flex-item>.circle {
+    animation-name: circle-rotate-anim;
+    animation-duration: 400ms;
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.rotate>.flex-row>.flex-item>.circle>div {
+    transition-duration: 0s;
+}
+
+@keyframes board-rotate-anim {
+    0% { transform: rotate(90deg) }
+    100% { transform: rotate(0deg) }
+}
+
+@keyframes circle-rotate-anim {
+    0% { transform: rotate(-90deg) }
+    100% { transform: rotate(0deg) }
+}
+
 .control>* {
     border-color: transparent;
 }
