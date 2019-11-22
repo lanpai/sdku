@@ -28,7 +28,7 @@
     border-radius: 100%;
 
     opacity: 0.6;
-    transition-duration: 0.3s;
+    transition-duration: 300ms;
     transition-property: opacity, background-color;
 }
 @media all and (orientation: portrait) {
@@ -64,7 +64,7 @@
 
 .complete {
     animation-name: complete-anim;
-    animation-duration: 3s;
+    animation-duration: 3000ms;
 }
 
 @for $i from 1 through 9 {

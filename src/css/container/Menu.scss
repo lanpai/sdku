@@ -11,11 +11,16 @@
 .score {
     padding: 0 1vw;
     opacity: 0.6;
+    transition-property: opacity;
+    transition-duration: 300ms;
+}
+.score:hover {
+    opacity: 1;
 }
 
 .score>div {
     animation-name: details-anim;
-    animation-duration: 1s;
+    animation-duration: 1000ms;
 }
 
 @keyframes details-anim {
