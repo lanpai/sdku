@@ -322,6 +322,7 @@ class Board extends Component {
                 let rotatedValues = [];
                 let rotatedAnswer = [];
                 let rotatedMeta = [];
+                let rotatedMoveHistory = [];
 
                 for (let ysub = 0; ysub < 9; ysub++) {
                     rotatedValues.push([]);
@@ -332,6 +333,17 @@ class Board extends Component {
                         rotatedAnswer[ysub][xsub] = this.state.answer[xsub][-ysub + 8];
                         rotatedMeta[ysub][xsub] = this.state.meta[xsub][-ysub + 8];
                     }
+                }
+                for (let i = 0; i < this.state.moveHistory.length; i++) {
+                    let ysub = this.state.moveHistory[i][0];
+                    let xsub = this.state.moveHistory[i][1];
+                    this.state.moveHistory[i] = [
+                        -xsub + 8,
+                        ysub,
+                        this.state.moveHistory[i][2],
+                        this.state.moveHistory[i][3]
+                    ];
+                    console.log(this.state.moveHistory);
                 }
 
                 this.setState({
