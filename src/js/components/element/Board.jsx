@@ -311,19 +311,23 @@ class Board extends Component {
 
             if (this.props.rotary) {
                 let rotatedValues = [];
+                let rotatedAnswer = [];
                 let rotatedMeta = [];
 
                 for (let ysub = 0; ysub < 9; ysub++) {
                     rotatedValues.push([]);
+                    rotatedAnswer.push([]);
                     rotatedMeta.push([]);
                     for (let xsub = 0; xsub < 9; xsub++) {
                         rotatedValues[ysub][xsub] = newValues[xsub][-ysub + 8];
+                        rotatedAnswer[ysub][xsub] = this.state.answer[xsub][-ysub + 8];
                         rotatedMeta[ysub][xsub] = this.state.meta[xsub][-ysub + 8];
                     }
                 }
 
                 this.setState({
                     values: rotatedValues,
+                    answer: rotatedAnswer,
                     meta: rotatedMeta,
                     animationStarted: true
                 });
