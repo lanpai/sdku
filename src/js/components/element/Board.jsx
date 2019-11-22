@@ -16,6 +16,10 @@ const mapStateToProps = state => {
             return false;
         if (state.settings.stopwatch && score.mods.indexOf(`stopwatch (${state.settings.stopwatchSetting}s)`) === -1)
             return false;
+        if (state.settings.expert && score.mods.indexOf('expert') === -1)
+            return false;
+        if (state.settings.rotary && score.mods.indexOf('rotary') === -1)
+            return false;
         return true;
     });
 
@@ -221,6 +225,11 @@ class Board extends Component {
                     mods.push('perfect');
                 if (this.props.stopwatch)
                     mods.push(`stopwatch (${this.props.stopwatchSetting}s)`);
+                if (this.props.expert)
+                    mods.push('expert');
+                if (this.props.rotary)
+                    mods.push('rotary');
+
                 SubmitScore(this.props.difficulty, diff, mods);
             }
         }
