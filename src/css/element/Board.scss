@@ -8,6 +8,9 @@
     border-right-width: 0.3vh;
 }
 
+.rotate {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
 .rotate>.flex-row>.flex-item>.circle {
     animation-name: circle-rotate-anim;
     animation-duration: 400ms;
