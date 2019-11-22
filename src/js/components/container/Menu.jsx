@@ -42,9 +42,11 @@ class Menu extends Component {
                 mods += ` ${mod}`
 
             lbComponent.push(
-                <div key={ i } className='score'>
-                    { date.getFullYear() }-{ date.getMonth() }-{ date.getDate() } - { minutes }:{ seconds }:{ ms }
-                    <div>{ mods }</div>
+                <div key={ date } className='score'>
+                    <div>
+                        { date.getFullYear() }-{ date.getMonth() }-{ date.getDate() } - { minutes }:{ seconds }:{ ms }
+                        <div>{ mods }</div>
+                    </div>
                 </div>
             );
         }
