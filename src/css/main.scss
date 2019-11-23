@@ -64,9 +64,9 @@ div {
     border-color: inherit;
 }
 
-body {
+body, #main-interface {
     -webkit-app-region: drag;
 }
-*:not(body) {
+*:not(body, #main-interface) {
     -webkit-app-region: no-drag;
 }
