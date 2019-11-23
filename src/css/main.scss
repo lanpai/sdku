@@ -63,3 +63,10 @@ div {
     border-width: 0.2vh;
     border-color: inherit;
 }
+
+body {
+    -webkit-app-region: drag;
+}
+*:not(body) {
+    -webkit-app-region: no-drag;
+}
