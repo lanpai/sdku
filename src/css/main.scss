@@ -67,6 +67,6 @@ div {
 body, #main-interface {
     -webkit-app-region: drag;
 }
-*:not(body, #main-interface) {
+*:not(body):not(#main-interface) {
     -webkit-app-region: no-drag;
 }
