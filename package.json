@@ -1,14 +1,37 @@
 {
   "name": "sdku-electron",
   "version": "1.0.0",
-  "description": "",
+  "description": "revamped sudoku",
   "main": "sdku-electron.js",
   "scripts": {
-    "start": "electron --enable-transparent-visuals sdku-electron.js"
+    "start": "electron --enable-transparent-visuals sdku-electron.js",
+    "dist": "electron-builder",
+    "dist:multi": "electron-builder --win --linux",
+    "dist:mac": "electron-builder --mac"
+  },
+  "build": {
+    "files": [
+      "dist/index.html",
+      "dist/main.js",
+      "sdku-electron.js"
+    ],
+    "appId": "piyo.cafe.sdku",
+    "productName": "sdku",
+    "win": {
+      "target": "portable",
+      "icon": "build/sdku-512x512.png"
+    },
+    "linux": {
+      "target": "appImage",
+      "icon": "build/sdku-512x512.png",
+      "maintainer": "lanpai",
+      "category": "Game"
+    }
   },
   "dependencies": {},
   "devDependencies": {
-    "electron": "^7.1.2"
+    "electron": "^7.1.2",
+    "electron-builder": "^21.2.0"
   },
   "repository": {
     "type": "git",
