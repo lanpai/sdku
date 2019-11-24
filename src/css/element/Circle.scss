@@ -80,3 +80,12 @@
     90% { opacity: 0.7; }
     100% { opacity: 0.6; }
 }
+
+text {
+    text-anchor: middle;
+    dominant-baseline: central;
+}
+
+svg {
+    max-width: 11.5vh;
+}

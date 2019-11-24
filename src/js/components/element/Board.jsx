@@ -64,7 +64,8 @@ class Board extends Component {
             currTime: 0,
             startTime: 0,
             initTime: 0,
-            animationStarted: false
+            animationStarted: false,
+            note: false
         };
     }
 
@@ -96,7 +97,7 @@ class Board extends Component {
             this.setState({
                 currTime: currTime
             });
-        }, 15);
+        }, 34);
     }
 
     stopWatch() {
@@ -117,6 +118,12 @@ class Board extends Component {
                 case '9':
                     this.switchControl(0, 0, parseInt(e.key));
                     break;
+                case '0':
+                case 'n':
+                    this.setState({ note: !this.state.note });
+                    break;
+                case 'z':
+                    e.ctrlKey && this.undo();
             }
         });
 
@@ -130,7 +137,8 @@ class Board extends Component {
             for (let x = 0; x < 9; x++)
                 children.push({
                     isSolid: false,
-                    style: {}
+                    style: {},
+                    notes: null
                 });
             values.push([]);
             meta.push(children);
@@ -163,12 +171,8 @@ class Board extends Component {
 
         this.state.values = values;
         this.state.meta = meta;
-        this.setState({
-            values: values,
-            meta: meta,
-            answer: answer,
-            playing: true
-        });
+        this.state.answer = answer;
+        this.state.playing = true;
 
         this.startWatch();
 
@@ -275,6 +279,40 @@ class Board extends Component {
         if (this.state.playing && !this.state.meta[y][x].isSolid && !this.state.animationStarted) {
             let newValue = this.state.active;
 
+            if (this.state.note) {
+                let newValues = cloneDeep(this.state.values);
+                let newMeta = cloneDeep(this.state.meta);
+
+                if (newValue === null)
+                    newMeta[y][x].notes = null;
+                else {
+                    if (newMeta[y][x].notes === null)
+                        newMeta[y][x].notes = [];
+                    else if (newMeta[y][x].notes[this.state.active - 1])
+                        newValue = null;
+
+                    newMeta[y][x].notes[this.state.active - 1] = newValue;
+
+                    for (let i = newMeta[y][x].notes.length - 1; i >= 0; i--) {
+                        if (newMeta[y][x].notes[i] === null)
+                            newMeta[y][x].notes.pop();
+                        else
+                            break;
+                    }
+
+                    if (newMeta[y][x].notes.length === 0)
+                        newMeta[y][x].notes = null;
+
+                    newValues[y][x] = null;
+                }
+
+                this.setState({
+                    values: newValues,
+                    meta: newMeta
+                });
+                return;
+            }
+
             if (currValue === this.state.active)
                 newValue = null;
 
@@ -286,24 +324,14 @@ class Board extends Component {
 
             this.state.moveHistory.push([ y, x, currValue, newValue ]);
 
-            this.setState({
-                values: newValues
-            });
-
-            if (Sudoku.CheckComplete(newValues)) {
-                this.handleEndCondition('complete');
-                return;
-            }
-
             if (this.props.perfect && this.state.active !== this.state.answer[y][x]) {
                 this.handleEndCondition('failure');
-                let newValues = cloneDeep(this.state.values);
                 let newMeta = cloneDeep(this.state.meta);
                 newValues[y][x] = `${this.state.active}/${this.state.answer[y][x]}`;
                 newMeta[y][x] = {
                     isSolid: true,
                     style: {
-                        color: this.props.theme.error,
+                        fill: this.props.theme.error,
                         borderColor: this.props.theme.error,
                         opacity: 1
                     }
@@ -312,6 +340,14 @@ class Board extends Component {
                     values: newValues,
                     meta: newMeta
                 });
+                return;
+            }
+
+            if (Sudoku.CheckComplete(newValues)) {
+                this.setState({
+                    values: newValues
+                });
+                this.handleEndCondition('complete');
                 return;
             }
 
@@ -343,7 +379,6 @@ class Board extends Component {
                         this.state.moveHistory[i][2],
                         this.state.moveHistory[i][3]
                     ];
-                    console.log(this.state.moveHistory);
                 }
 
                 this.setState({
@@ -358,14 +393,20 @@ class Board extends Component {
                         animationStarted: false
                     });
                 }, 400);
+
+                return;
             }
+
+            this.setState({
+                values: newValues
+            });
         }
     }
 
     switchControl(x, y, currValue) {
         this.state.active === currValue && (currValue = null);
         this.setState({
-            active: currValue
+            active: parseInt(currValue)
         });
     }
 
@@ -395,7 +436,9 @@ class Board extends Component {
                                 }
                                 row={ row }
                                 col={ col }
-                                onClick={ this.handleGridClick }>
+                                onClick={ this.handleGridClick }
+                                tile
+                                notes={ this.state.meta[row][col].notes }>
                                 { value }
                             </Circle>
                         </div>
@@ -419,44 +462,11 @@ class Board extends Component {
     render() {
         let count = this.checkCount();
 
-        let tableStyle = {
-            borderColor: this.props.theme.secondary
-        };
-
-        let controlRow = [];
-        for (let i = 1; i <= 9; i++) {
-            controlRow.push(
-                <div
-                    className='flex-item'
-                    key={ i }>
-                    <Circle
-                        theme={ this.props.theme }
-                        solid
-                        active={ i === this.state.active }
-                        onClick={ this.switchControl }
-                        sub={ this.props.expert ? null : 9 - count[i - 1] }>
-                        { i }
-                    </Circle>
-                </div>
-            );
-        }
-
         let watchDiff = this.state.currTime - this.state.startTime;
-        if (this.props.stopwatch)
-            watchDiff = (this.props.stopwatchSetting * 1000) - watchDiff;
         if (!this.state.playing)
             watchDiff = this.state.currTime - this.state.initTime;
-
-        let controlClass = 'control';
-        if (!this.state.playing)
-            controlClass += ' complete';
-
-        let undoButton = null;
-        let clearButton = null;
-        if (!this.props.perfect) {
-            undoButton = <span onClick={ this.undo }>undo&nbsp;</span>;
-            clearButton = <span onClick={ this.clear }>clear&nbsp;</span>;
-        }
+        else if (this.props.stopwatch)
+            watchDiff = (this.props.stopwatchSetting * 1000) - watchDiff;
 
         let rotationStyle = {};
         if (this.state.animationStarted) {
@@ -471,8 +481,12 @@ class Board extends Component {
                     <span className='title'>sdku</span><br />
                     <Timer time={ watchDiff } />
                     <div className='button-menu'>
-                        { clearButton }
-                        { undoButton }
+                        { !this.props.perfect &&
+                            <>
+                                <span onClick={ this.undo }>undo&nbsp;</span>
+                                <span onClick={ this.clear }>clear&nbsp;</span>
+                            </>
+                        }
                         <span onClick={ () => SwitchActive('menu') }>menu</span>
                     </div>
                 </div>
@@ -481,9 +495,118 @@ class Board extends Component {
                     style={ rotationStyle }>
                     { this.createTable() }
                 </div>
-                <div className={ controlClass }>
+                <div className={ 'control' + (!this.state.playing ? ' complete' : '') }>
                     <div className='flex-row'>
-                        { controlRow }
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                solid
+                                active={ 1 === this.state.active }
+                                onClick={ this.switchControl }
+                                sub={ this.props.expert ? null : 9 - count[0] }
+                                tile>
+                                1
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                solid
+                                active={ 2 === this.state.active }
+                                onClick={ this.switchControl }
+                                sub={ this.props.expert ? null : 9 - count[1] }
+                                tile>
+                                2
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                solid
+                                active={ 3 === this.state.active }
+                                onClick={ this.switchControl }
+                                sub={ this.props.expert ? null : 9 - count[2] }
+                                tile>
+                                3
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                solid
+                                active={ 4 === this.state.active }
+                                onClick={ this.switchControl }
+                                sub={ this.props.expert ? null : 9 - count[3] }
+                                tile>
+                                4
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                solid
+                                active={ 5 === this.state.active }
+                                onClick={ this.switchControl }
+                                sub={ this.props.expert ? null : 9 - count[4] }
+                                tile>
+                                5
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                solid
+                                active={ 6 === this.state.active }
+                                onClick={ this.switchControl }
+                                sub={ this.props.expert ? null : 9 - count[5] }
+                                tile>
+                                6
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                solid
+                                active={ 7 === this.state.active }
+                                onClick={ this.switchControl }
+                                sub={ this.props.expert ? null : 9 - count[6] }
+                                tile>
+                                7
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                solid
+                                active={ 8 === this.state.active }
+                                onClick={ this.switchControl }
+                                sub={ this.props.expert ? null : 9 - count[7] }
+                                tile>
+                                8
+                            </Circle>
+                        </div>
+                        <div className='flex-item'>
+                            <Circle
+                                theme={ this.props.theme }
+                                solid
+                                active={ 9 === this.state.active }
+                                onClick={ this.switchControl }
+                                sub={ this.props.expert ? null : 9 - count[8] }
+                                tile>
+                                9
+                            </Circle>
+                        </div>
+                        <div
+                            className='flex-item'
+                            key='note'>
+                            <Circle
+                                theme={ this.props.theme }
+                                solid
+                                active={ this.state.note }
+                                onClick={ () => this.setState({ note: !this.state.note }) }>
+                                note
+                            </Circle>
+                        </div>
                     </div>
                 </div>
             </>
