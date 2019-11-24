@@ -5,6 +5,7 @@ function createWindow() {
         let win = new BrowserWindow({
             width: 1280,
             height: 720,
+            resizable: true,
             frame: false,
             title: 'sdku',
             transparent: true,
