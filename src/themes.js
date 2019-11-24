@@ -4,7 +4,7 @@ function GetTheme(theme) {
             return {
                 name: 'blossom',
                 background: '#F7EBEC',
-                primary: '#DDBDD5',
+                primary: '#E094C5',
                 secondary: '#59656F',
                 error: '#ED5858'
             };
