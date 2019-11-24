@@ -56,7 +56,7 @@ class Menu extends Component {
                 <div>
                     <span className='title'>sdku</span><br />
                     <span>
-                        minimalist sudoku
+                        revamped sudoku
                     </span>
                 </div>
                 <div>
