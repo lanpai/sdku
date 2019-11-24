@@ -4,7 +4,7 @@
   "description": "",
   "main": "sdku-electron.js",
   "scripts": {
-    "start": "electron sdku-electron.js"
+    "start": "electron --enable-transparent-visuals sdku-electron.js"
   },
   "dependencies": {},
   "devDependencies": {
