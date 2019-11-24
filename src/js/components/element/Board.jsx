@@ -266,13 +266,19 @@ class Board extends Component {
     clear() {
         if (this.state.playing) {
             let newValues = cloneDeep(this.state.values);
-            for (let y = 0; y < this.state.meta.length; y++)
-                for (let x = 0; x < this.state.meta[y].length; x++)
-                    if (!this.state.meta[y][x].isSolid)
+            let newMeta = cloneDeep(this.state.meta);
+            for (let y = 0; y < this.state.meta.length; y++) {
+                for (let x = 0; x < this.state.meta[y].length; x++) {
+                    if (!this.state.meta[y][x].isSolid) {
                         newValues[y][x] = null;
+                        newMeta[y][x].notes = null;
+                    }
+                }
+            }
 
             this.setState({
-                values: newValues
+                values: newValues,
+                meta: newMeta
             });
         }
     }
