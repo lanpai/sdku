@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import cloneDeep from 'lodash/cloneDeep';
 import filter from 'lodash/filter';
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
+import { faPencilAlt, faBackspace as faUndo, faTrashAlt, faBars } from '@fortawesome/free-solid-svg-icons';
 import Sudoku from '../../../Sudoku';
 import { SwitchActive, SubmitScore } from '../../../actions';
 
@@ -477,17 +479,17 @@ class Board extends Component {
         return (
             <>
                 <div
-                    style={{ color: this.props.theme.secondary }}>
+                    style={{ color: this.props.theme.secondary, fill:this.props.theme.secondary }}>
                     <span className='title'>sdku</span><br />
                     <Timer time={ watchDiff } />
                     <div className='button-menu'>
                         { !this.props.perfect &&
                             <>
-                                <span onClick={ this.undo }>undo&nbsp;</span>
-                                <span onClick={ this.clear }>clear&nbsp;</span>
+                                <span onClick={ this.undo }><Icon icon={ faUndo } />&nbsp;</span>
+                                <span onClick={ this.clear }><Icon icon={ faTrashAlt } />&nbsp;</span>
                             </>
                         }
-                        <span onClick={ () => SwitchActive('menu') }>menu</span>
+                        <span onClick={ () => SwitchActive('menu') }><Icon icon={ faBars } /></span>
                     </div>
                 </div>
                 <div
@@ -603,8 +605,8 @@ class Board extends Component {
                                 theme={ this.props.theme }
                                 solid
                                 active={ this.state.note }
-                                onClick={ () => this.setState({ note: !this.state.note }) }>
-                                note
+                                onClick={ () => this.setState({ note: !this.state.note }) }
+                                svg={ <Icon icon={ faPencilAlt } /> }>
                             </Circle>
                         </div>
                     </div>

@@ -22,7 +22,8 @@ class Circle extends Component {
             color = this.props.theme.background;
             stylesheet.backgroundColor = this.props.theme.primary;
         }
-        if (!this.props.children && (!this.props.notes || (this.props.notes && !this.props.notes.length)))
+        if (!this.props.svg && (!this.props.children &&
+            (!this.props.notes || (this.props.notes && !this.props.notes.length))))
             stylesheet.opacity = 0;
         stylesheet = { ...stylesheet, ...this.props.style };
 
@@ -35,20 +36,23 @@ class Circle extends Component {
             topHeight = 50 - (7 * fontScale) + '%';
 
         let component = null;
-        if (this.props.children || this.props.sub) {
+        if (this.props.svg) {
+            component = this.props.svg;
+        }
+        else if (this.props.children || this.props.sub) {
             component =
-                <>
+                <svg viewBox='0 0 100 100'>
                     <text x='50%' y={ topHeight } fontSize={ 20 * fontScale }>
                         { this.props.children }
                     </text>
                     <text x='50%' y={ 50 + (9 * fontScale) + '%' } fontSize={ 15 * fontScale }>
                         { this.props.sub }
                     </text>
-                </>;
+                </svg>;
         }
         else if (this.props.notes && this.props.notes.length > 0) {
             component =
-                <>
+                <svg viewBox='0 0 100 100'>
                     <text x='25%' y='25%' fontSize={ 12 * fontScale }>
                         { this.props.notes[0] }
                     </text>
@@ -76,15 +80,13 @@ class Circle extends Component {
                     <text x='75%' y='75%' fontSize={ 12 * fontScale }>
                         { this.props.notes[8] }
                     </text>
-                </>;
+                </svg>;
         }
 
         return (
             <div className='circle' onClick={ this.onClick }>
                 <div className={ this.props.className } style={{ fill: color, ...stylesheet }}>
-                    <svg viewBox='0 0 100 100'>
-                        { component }
-                    </svg>
+                    { component }
                 </div>
             </div>
         );
