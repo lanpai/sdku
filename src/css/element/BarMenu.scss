@@ -1,0 +1,36 @@
+.bar-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    padding: 4px;
+
+    display: flex;
+}
+
+.bar-menu>* {
+    margin: 4px;
+    border-radius: 6px;
+    height: 12px;
+    width: 12px;
+
+    opacity: 0.6;
+
+    transition-duration: 300ms;
+    transition-property: opacity;
+
+    cursor: pointer;
+}
+.bar-menu>*:hover {
+    opacity: 1;
+}
+
+.bar-menu>#maximize {
+    background-color: #44cc45;
+}
+.bar-menu>#minimize {
+    background-color: #f2c141;
+}
+.bar-menu>#exit {
+    background-color: #f35c5a;
+}

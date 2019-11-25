@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack-dev-server --open --mode production",
     "test": "webpack-dev-server --open --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "build:electron": "webpack --mode production --target electron-renderer"
   },
   "repository": {
     "type": "git",
@@ -22,13 +23,15 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/react-fontawesome": "^0.1.7",
+    "electron": "^7.1.2",
     "express": "^4.17.1",
     "immutability-helper": "^3.0.1",
     "lodash": "^4.17.15",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-redux": "^7.1.1",
-    "redux": "^4.0.4"
+    "redux": "^4.0.4",
+    "remove": "^0.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",

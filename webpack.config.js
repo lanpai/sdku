@@ -1,7 +1,14 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
-module.exports = {
+module.exports = (env, argv) => ({
+    entry: {
+        script: argv.target === 'electron-renderer' ? './src/index.electron.js' : './src/index.js'
+    },
+    output: {
+        filename: '[name].bundle.js',
+        path: path.resolve(__dirname, 'dist')
+    },
     module: {
         rules: [
             {
@@ -29,5 +36,4 @@ module.exports = {
             filename: 'index.html'
         })
     ]
-};
-
+});
