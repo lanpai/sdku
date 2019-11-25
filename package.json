@@ -8,14 +8,16 @@
     "test:electron": "webpack --mode development --target electron-renderer && electron sdku-electron.js",
     "build:web": "webpack --mode production",
     "build:electron": "webpack --mode production --target electron-renderer",
-    "dist:native": "electron-builder",
-    "dist:multi": "electron-builder --win --linux",
-    "dist:mac": "electron-builder --mac"
+    "dist:native": "npm run build:electron && electron-builder",
+    "dist:multi": "npm run build:electron && electron-builder --win --linux",
+    "dist:win": "npm run build:electron && electron-builder --win",
+    "dist:mac": "npm run build:electron && electron-builder --mac",
+    "dist:linux": "npm run build:electron && electron-builder --linux"
   },
   "build": {
     "files": [
       "dist/index.html",
-      "dist/main.js",
+      "dist/script.bundle.js",
       "sdku-electron.js"
     ],
     "appId": "piyo.cafe.sdku",
