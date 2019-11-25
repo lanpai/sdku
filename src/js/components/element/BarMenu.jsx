@@ -11,9 +11,13 @@ class BarMenu extends Component {
     render() {
         return (
             <div className='bar-menu'>
-                <div id='maximize' onClick={ remote.getCurrentWindow().minimize() }></div>
-                <div id='minimize'></div>
-                <div id='exit'></div>
+                <div id='maximize' onClick={ () => remote.getCurrentWindow().minimize() }></div>
+                <div id='minimize' onClick={ () => {
+                    let win = remote.getCurrentWindow();
+                    if (win.isMaximized()) win.unmaximize();
+                    else win.maximize();
+                }}></div>
+                <div id='exit' onClick={ () => remote.getCurrentWindow().close() }></div>
             </div>
         )
     }
