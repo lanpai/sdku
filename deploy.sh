@@ -1,6 +1,6 @@
 #!/bin/sh
 
-npm run build && \
+npm run build:web && \
 git checkout gh-pages && \
 git pull && \
 cp dist/index.html ./ && \
