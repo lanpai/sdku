@@ -2,7 +2,7 @@
   "name": "sdku",
   "version": "1.0.0",
   "description": "web-based sudoku application",
-  "main": "sdku.js",
+  "main": "sdku-electron.js",
   "scripts": {
     "test:web": "webpack-dev-server --open --mode development",
     "test:electron": "webpack --mode development --target electron-renderer && electron sdku-electron.js",
