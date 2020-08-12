@@ -55,7 +55,7 @@
     "react-redux": "^7.1.1",
     "redux": "^4.0.4",
     "remove": "^0.1.5",
-    "serialize-javascript": "^2.1.2"
+    "serialize-javascript": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
